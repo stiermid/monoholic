@@ -1,0 +1,136 @@
+// monoholic.scss
+
+:root {
+  --bg-color: #030303;
+  --text-color: #e0e0e0;
+  --meta-color: #888888;
+  --border-color: #222222;
+  --font-family: 'JetBrains Mono', monospace;
+  --base-size: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: var(--base-size);
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  margin-top: 0;
+}
+
+p {
+  margin-top: 0;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+// Header
+.site-header {
+  margin-bottom: 5rem;
+  .site-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Typography / Sections
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+// About Section
+.about-section {
+  margin-bottom: 5rem;
+  .about-content {
+    p {
+      margin-bottom: 1.5rem;
+    }
+  }
+  .about-meta {
+    margin-top: 2rem;
+    p {
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+// Posts Section
+.posts-section {
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      flex-wrap: wrap; // Mobile safety
+    }
+  }
+  
+  .post-meta {
+    color: var(--meta-color);
+    flex-shrink: 0;
+    width: 130px; // Fixed width for alignment
+  }
+}
+
+// Footer
+.site-footer {
+  margin-top: 5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--meta-color);
+  
+  .footer-col {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  p {
+    margin: 0;
+  }
+}
+
+// Page Layout Styles (For standard pages/posts if they have content)
+.page-content {
+  .post-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .post-meta {
+    color: var(--meta-color);
+    margin-bottom: 2rem;
+    display: block;
+  }
+}

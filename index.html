@@ -1,0 +1,29 @@
+---
+layout: default
+---
+
+<section class="about-section">
+  <h2 class="section-title">// about //</h2>
+  <div class="about-content">
+    <p>Systems architect and low-level enthusiast. Focused on distributed systems, kernel optimization, and minimalist interface design.</p>
+    <p>Currently exploring the intersection of formal verification and high-performance computing. Operating primarily in Rust, C, and Assembly.</p>
+    <div class="about-meta">
+      <p>Location: [REDACTED]</p>
+      <p>Status: Idle</p>
+    </div>
+  </div>
+</section>
+
+<section class="posts-section">
+  <h2 class="section-title">// posts //</h2>
+  <ul class="post-list">
+    {%- for post in site.posts -%}
+    <li>
+      <span class="post-meta">* {{ post.date | date: "%Y%m%d" }}</span>
+      <a class="post-link" href="{{ post.url | relative_url }}">
+        {{ post.title | escape }}
+      </a>
+    </li>
+    {%- endfor -%}
+  </ul>
+</section>
