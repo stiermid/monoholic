@@ -24,7 +24,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   margin-top: 0;
 }
@@ -36,6 +41,7 @@ p {
 a {
   color: var(--text-color);
   text-decoration: none;
+
   &:hover {
     text-decoration: underline;
   }
@@ -44,12 +50,13 @@ a {
 .wrapper {
   max-width: 680px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 2rem;
 }
 
 // Header
 .site-header {
-  margin-bottom: 5rem;
+  margin-top: 5rem;
+
   .site-title {
     font-size: 1.25rem;
     font-weight: 700;
@@ -67,13 +74,16 @@ a {
 // About Section
 .about-section {
   margin-bottom: 5rem;
+
   .about-content {
     p {
       margin-bottom: 1.5rem;
     }
   }
+
   .about-meta {
     margin-top: 2rem;
+
     p {
       margin-bottom: 0.25rem;
     }
@@ -86,7 +96,7 @@ a {
     list-style: none;
     padding: 0;
     margin: 0;
-    
+
     li {
       margin-bottom: 0.75rem;
       display: flex;
@@ -95,7 +105,7 @@ a {
       flex-wrap: wrap; // Mobile safety
     }
   }
-  
+
   .post-meta {
     color: var(--meta-color);
     flex-shrink: 0;
@@ -107,16 +117,15 @@ a {
 .site-footer {
   margin-top: 5rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
   font-size: 0.85rem;
   color: var(--meta-color);
-  
+
   .footer-col {
     display: flex;
     justify-content: space-between;
     width: 100%;
   }
-  
+
   p {
     margin: 0;
   }
@@ -128,6 +137,7 @@ a {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
   }
+
   .post-meta {
     color: var(--meta-color);
     margin-bottom: 2rem;
