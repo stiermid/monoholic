@@ -6,7 +6,7 @@
   --meta-color: #888888;
   --border-color: #222222;
   --font-family: 'JetBrains Mono', monospace;
-  --base-size: 14px;
+  --base-size: 16px;
 }
 
 * {
@@ -50,16 +50,17 @@ a {
 .wrapper {
   max-width: 680px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 4rem 2rem;
 }
 
 // Header
 .site-header {
-  margin-top: 5rem;
+  margin: 3rem 0;
 
   .site-title {
-    font-size: 1.25rem;
+    font-size: 2rem;
     font-weight: 700;
+    // line-height: 1.4;
     letter-spacing: 0.5px;
   }
 }
@@ -115,7 +116,6 @@ a {
 
 // Footer
 .site-footer {
-  margin-top: 5rem;
   padding-top: 2rem;
   font-size: 0.85rem;
   color: var(--meta-color);
