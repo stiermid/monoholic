@@ -72,46 +72,30 @@ a {
   margin-bottom: 1.5rem;
 }
 
-// About Section
-.about-section {
-  margin-bottom: 5rem;
-
-  .about-content {
-    p {
-      margin-bottom: 1.5rem;
-    }
-  }
-
-  .about-meta {
-    margin-top: 2rem;
-
-    p {
-      margin-bottom: 0.25rem;
-    }
-  }
+// Section
+section {
+  margin-bottom: 2rem;
 }
 
 // Posts Section
-.posts-section {
-  .post-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 
-    li {
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      flex-wrap: wrap; // Mobile safety
-    }
+  li {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap; // Mobile safety
   }
+}
 
-  .post-meta {
-    color: var(--meta-color);
-    flex-shrink: 0;
-    width: 130px; // Fixed width for alignment
-  }
+.post-meta {
+  color: var(--meta-color);
+  flex-shrink: 0;
+  width: 130px; // Fixed width for alignment
 }
 
 // Footer
