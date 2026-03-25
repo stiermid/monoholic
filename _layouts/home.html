@@ -4,23 +4,5 @@ layout: default
 
 {%- include header.html -%}
 
-<section class="about-section">
-  <h2 class="section-title">// about //</h2>
-  <div class="about-content">
-    {{ content }}
-  </div>
-</section>
+{%- include menu.html collection=site.data.menu.entries -%}
 
-<section class="posts-section">
-  <h2 class="section-title">// posts //</h2>
-  <ul class="post-list">
-    {%- for post in site.posts -%}
-    <li>
-      <span class="post-meta">* {{ post.date | date: "%Y%m%d" }}</span>
-      <a class="post-link" href="{{ post.url | relative_url }}">
-        {{ post.title | escape }}
-      </a>
-    </li>
-    {%- endfor -%}
-  </ul>
-</section>
