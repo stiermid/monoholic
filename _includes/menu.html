@@ -1,0 +1,15 @@
+{%- for item in include.collection -%}
+<section>
+  <h2 class="section-title">// {{ item.title }} //</h2>
+  {%- if item.content -%}
+  {{ item.content }}
+  {%- endif -%}
+</section>
+{%- if item.post_list -%}
+{%- include post_list.html -%}
+{%- endif -%}
+
+{%- if item.entries -%}
+{%- include menu.html collection = item.entries -%}
+{%- endif -%}
+{%- endfor -%}
