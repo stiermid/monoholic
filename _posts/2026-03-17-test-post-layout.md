@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Testing the Post Layout'
+title: "Testing the Post Layout"
 date: 2026-03-17 12:00:00 +0000
 categories: [test, jekyll]
 ---
@@ -38,7 +38,7 @@ And a fenced code block:
 function greet(name) {
   return `Hello, ${name}! Welcome to the blog.`;
 }
-console.log(greet('World'));
+console.log(greet("World"));
 ```
 
 Here's a blockquote:
