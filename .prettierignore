@@ -1,4 +1,12 @@
+# Jekyll generated files
 _site/
 .jekyll-cache/
 .sass-cache/
+
+# Vendor files
+vendor/
+node_modules/
+
+# Other ignored files
 Gemfile.lock
+package-lock.json
