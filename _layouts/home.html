@@ -4,15 +4,5 @@ layout: default
 
 {%- include header.html -%}
 
-<section>
-  <h2 class="section-title">// about //</h2>
-  <div class="about-content">
-    {{ content }}
-  </div>
-</section>
+{%- include menu.html collection=site.data.menu.entries -%}
 
-<section>
-  <h2 class="section-title">// posts //</h2>
-    {%- include post_list.html -%}
-  </ul>
-</section>

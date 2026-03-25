@@ -1,0 +1,8 @@
+entries:
+  - title: about
+    content: |
+      <p> Lorem.</p>
+
+  - title: all posts
+    post_list: true
+
