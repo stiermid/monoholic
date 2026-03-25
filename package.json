@@ -1,8 +1,7 @@
 {
   "name": "monoholic",
-  "version": "1.0.0",
-  "description": "Welcome to your new Jekyll theme! In this directory, you'll find the files you need to be able to package up your theme into a gem. Put your layouts in `_layouts`, your includes in `_includes`, your sass files in `_sass` and any other assets in `assets`.",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "Minimal dark jekyll theme",
   "scripts": {
     "format": "prettier --write ."
   },
@@ -12,8 +11,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/stiermid/monoholic/issues"
   },
