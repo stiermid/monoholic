@@ -1,6 +1,10 @@
 # monoholic
 
-Minimal dark jekyll theme
+Minimal monochrome dark jekyll theme.
+
+<h3 align="center"><a href="https://stiermid.github.io/monoholic">Try the demo out!</a></h3>
+
+![Screenshot of homepage](./_screenshots/home.png)
 
 ## Installation
 
