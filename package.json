@@ -1,7 +1,7 @@
 {
   "name": "monoholic",
   "version": "0.1.0",
-  "description": "Minimal dark jekyll theme",
+  "description": "Minimal monochrome dark Jekyll theme",
   "scripts": {
     "format": "prettier --write ."
   },
@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "bugs": {
     "url": "https://github.com/stiermid/monoholic/issues"
   },
