@@ -43,7 +43,8 @@ a {
   text-decoration: underline;
 }
 
-.highlighter-rouge, highlight {
+.highlighter-rouge,
+highlight {
   background-color: var(--text-color);
   color: var(--bg-color);
 }
@@ -57,7 +58,9 @@ blockquote {
   border: thin solid var(--border-color);
   padding: 1rem;
 
-  p { margin: 0; }
+  p {
+    margin: 0;
+  }
 }
 
 .wrapper {
