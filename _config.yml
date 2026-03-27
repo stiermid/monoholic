@@ -8,10 +8,12 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username: "stiermid"
 theme: "monoholic"
 
-
 # Build settings
 markdown: kramdown
-theme: null # We are testing this theme locally, so we set theme to null or we use the local files
+remote_theme: stiermid/monoholic
+
+theme_config:
+  back: ".."
 
 plugins:
   - jekyll-feed
