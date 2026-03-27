@@ -40,11 +40,24 @@ p {
 
 a {
   color: var(--text-color);
-  text-decoration: none;
+  text-decoration: underline;
+}
 
-  &:hover {
-    text-decoration: underline;
-  }
+.highlighter-rouge, highlight {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+pre.highlight {
+  padding: 1rem;
+}
+
+blockquote {
+  font-style: italic;
+  border: thin solid var(--border-color);
+  padding: 1rem;
+
+  p { margin: 0; }
 }
 
 .wrapper {
@@ -60,7 +73,6 @@ a {
   .site-title {
     font-size: 2rem;
     font-weight: 700;
-    // line-height: 1.4;
     letter-spacing: 0.5px;
   }
 }
@@ -94,8 +106,6 @@ section {
 
 .post-meta {
   color: var(--meta-color);
-  flex-shrink: 0;
-  width: 130px; // Fixed width for alignment
 }
 
 // Footer
