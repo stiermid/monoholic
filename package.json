@@ -1,7 +1,7 @@
 {
   "name": "monoholic",
   "version": "0.1.0",
-  "description": "Minimal dark jekyll theme",
+  "description": "Minimal monochrome dark Jekyll theme",
   "scripts": {
     "format": "prettier --write ."
   },
