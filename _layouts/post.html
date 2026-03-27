@@ -3,6 +3,11 @@ layout: default
 ---
 {%- include back_link.html -%}
 
-<h1>{{ page.title }}</h1>
+<article>
+  <span class="post-meta" style="text-align: right">
+    {{ page.date | date: '%Y%m%d' }}
+  </span>
+  <h1>{{ page.title }}</h1>
 
-{{ content }}
+  {{ content }}
+</article>
