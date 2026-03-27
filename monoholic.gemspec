@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Agil Mammadov"]
   spec.email         = ["mammadovagil@tutamail.com"]
 
-  spec.summary       = "Minimal dark jekyll theme"
+  spec.summary       = "Minimal monochrome dark Jekyll theme"
   spec.homepage      = "https://github.com/stiermid/monoholic"
   spec.license       = "GPL-3.0-only"
 
