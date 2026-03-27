@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Minimal dark jekyll theme"
   spec.homepage      = "https://github.com/stiermid/monoholic"
-  spec.license       = "MIT"
+  spec.license       = "GPL-3.0-only"
 
   spec.files         = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_data|_layouts|_includes|_sass|LICENSE|README|_config\.yml)!i) }
 
