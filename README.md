@@ -1,5 +1,11 @@
 # Monoholic
 
+[![Github license](https://img.shields.io/github/license/stiermid/monoholic?color=black)](https://www.gnu.org/licenses/gpl-3.0.txt)
+[![GitHub release](https://img.shields.io/github/v/release/stiermid/monoholic?color=black)](https://github.com/stiermid/monoholic/releases)
+[![Ruby](https://img.shields.io/badge/Ruby-gem-black?logo=ruby&logoColor=white)](https://rubygems.org/gems/monoholic)
+[![Gem Version](https://img.shields.io/gem/v/monoholic?color=black)](https://rubygems.org/gems/monoholic)
+[![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-ready-black?logo=github&logoColor=white)](https://stiermid.github.io/monoholic)
+
 A minimal, monochrome dark Jekyll theme🧪
 
 <h3 align="center"><a href="https://stiermid.github.io/monoholic">Try the demo out!</a></h3>
