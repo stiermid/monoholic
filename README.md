@@ -52,7 +52,7 @@ Or, simply fork this repository, adapt the `_config.yml` according to your needs
 
 ### Basic Setup
 
-Once installed, build your site using the provided layouts (`default`, `home`, `page`, `post`). 
+Once installed, build your site using the provided layouts (`default`, `home`, `page`, `post`).
 
 ### Configuration
 
@@ -60,13 +60,13 @@ Override the default settings in your `_config.yml`. Key theme configuration opt
 
 ```yaml
 theme_config:
-  back: ".."            # Text for backlink on post pages
+  back: ".." # Text for backlink on post pages
   date_format: "%Y%m%d" # Date format for post metadata
 ```
 
 ### Menu Configuration
 
-Monoholic uses a data-driven approach to its menu. Create or edit `_data/menu.yml` to define your site's navigation structure. 
+Monoholic uses a data-driven approach to its menu. Create or edit `_data/menu.yml` to define your site's navigation structure.
 
 Example `_data/menu.yml`:
 
@@ -80,9 +80,9 @@ entries:
     post_list: true
 ```
 
-* `title`: The section header.
-* `content`: Custom HTML or text for the menu section.
-* `post_list`: Set to `true` to auto-generate a list of your Jekyll posts under this section.
+- `title`: The section header.
+- `content`: Custom HTML or text for the menu section.
+- `post_list`: Set to `true` to auto-generate a list of your Jekyll posts under this section.
 
 ## Contributing
 
