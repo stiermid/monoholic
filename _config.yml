@@ -8,8 +8,6 @@ baseurl: "/monoholic" # the subpath of your site, e.g. /blog
 url: "https://stiermid.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username: "stiermid"
 
-remote_theme: stiermid/monoholic
-
 # Build settings
 markdown: kramdown
 remote_theme: stiermid/monoholic
