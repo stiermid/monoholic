@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "monoholic"
-  spec.version       = "0.2.0"
+  spec.version       = "0.2.1"
   spec.authors       = ["Agil Mammadov"]
   spec.email         = ["mammadovagil@tutamail.com"]
 
