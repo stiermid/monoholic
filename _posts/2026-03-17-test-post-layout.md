@@ -51,7 +51,7 @@ Here's a blockquote:
 This is a [link to the homepage](/).
 
 If there are images, they would go here:
-![Placeholder Image](https://via.placeholder.com/800x400)
+![Placeholder Image](https://cdn.freebiesupply.com/logos/large/2x/linux-tux-1-logo-png-transparent.png)
 
 ---
 
