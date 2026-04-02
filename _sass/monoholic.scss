@@ -59,6 +59,12 @@ highlight {
   color: var(--bg-color);
 }
 
+div.highlighter-rouge code {
+  display: block;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
 pre.highlight {
   padding: 1rem;
 }
