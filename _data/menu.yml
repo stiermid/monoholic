@@ -1,7 +1,6 @@
 entries:
   - title: about
-    content: |
-      <p> Lorem.</p>
+    content_file: about.md
 
   - title: all posts
     post_list: true
