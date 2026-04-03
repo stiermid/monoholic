@@ -1,7 +1,15 @@
 {%- for item in include.collection -%}
   <section>
     <h2 class="section-title">// {{ item.title }} //</h2>
-    {%- if item.content -%}{{ item.content }}{%- endif -%}
+    {%- if item.content_file -%}
+      {%- assign _menu_page = site.pages
+        | where: 'path', item.content_file
+        | first
+      -%}
+      {{ _menu_page.content | markdownify }}
+    {%- elsif item.content -%}
+      {{ item.content }}
+    {%- endif -%}
   </section>
   {%- if item.post_list -%}{%- include post_list.html -%}{%- endif -%}
   {%- if item.entries -%}
