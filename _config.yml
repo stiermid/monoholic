@@ -16,6 +16,7 @@ theme_config:
   back: ".."
   date_format: "%Y%m%d"
   monochrome_images: true
+  footer: true # set to false to hide the footer
 
 plugins:
   - jekyll-feed
