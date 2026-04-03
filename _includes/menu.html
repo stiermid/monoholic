@@ -2,8 +2,11 @@
   <section>
     <h2 class="section-title">// {{ item.title }} //</h2>
     {%- if item.content_file -%}
-      {%- capture file_content -%}{%- include {{ item.content_file }} -%}{%- endcapture -%}
-      {{ file_content | markdownify }}
+      {%- assign _menu_page = site.pages
+        | where: 'path', item.content_file
+        | first
+      -%}
+      {{ _menu_page.content | markdownify }}
     {%- elsif item.content -%}
       {{ item.content }}
     {%- endif -%}
