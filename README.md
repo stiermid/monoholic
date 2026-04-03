@@ -14,13 +14,10 @@ A minimal, monochrome dark Jekyll theme🧪
 
 ## Features
 
-- **Minimalist Dark Aesthetic:** Sleek, high-contrast monochrome design out of the box.
-- **Data-Driven Menu:** Easily configure your site navigation via `_data/menu.yml`.
-- **Developer Friendly:** Code syntax highlighting and monospace typography (JetBrains Mono).
-- **Responsive Design:** Mobile-first layout with smooth fluid scaling using modern CSS.
-- **Customizable:** Centralized CSS variables for fast theming.
-- **SEO & RSS Ready:** Built-in support for `jekyll-seo-tag` and `jekyll-feed`.
-- **Per-Page Scripts:** Add specific JavaScript to individual pages seamlessly.
+- Minimalist dark monochrome design
+- Data-driven menu via `_data/menu.yml`
+- Optional grayscale image filter
+- SEO & RSS support
 
 ## Installation
 
@@ -68,6 +65,8 @@ Override the default settings in your `_config.yml`. Key theme configuration opt
 theme_config:
   back: ".." # Text for backlink on post pages
   date_format: "%Y%m%d" # Date format for post metadata
+  monochrome_images: true # Apply grayscale filter to images (default: false)
+  footer: true # Show/hide site footer (default: true)
 ```
 
 ### Menu Configuration
@@ -88,7 +87,20 @@ entries:
 
 - `title`: The section header.
 - `content`: Custom HTML or text for the menu section.
+- `content_file`: Path to an external markdown file (e.g., `about.md`) to load content from your root directory.
 - `post_list`: Set to `true` to auto-generate a list of your Jekyll posts under this section.
+
+#### Using External Content Files
+
+You can reference external markdown files instead of inline content:
+
+```yaml
+entries:
+  - title: about
+    content_file: about.md
+```
+
+This will load and render the content from `about.md` in your site's root directory.
 
 ## Contributing
 
