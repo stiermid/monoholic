@@ -65,7 +65,7 @@ Override the default settings in your `_config.yml`. Key theme configuration opt
 theme_config:
   back: ".." # Text for backlink on post pages
   date_format: "%Y%m%d" # Date format for post metadata
-  monochrome_images: true # Apply grayscale filter to images (default: false)
+  monochrome_images: true # Apply grayscale filter to images (default: true)
   footer: true # Show/hide site footer (default: true)
 ```
 
