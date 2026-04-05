@@ -18,6 +18,8 @@ theme_config:
   monochrome_images: true
   footer: true # set to false to hide the footer
 
+# goatcounter: mycode # your GoatCounter site code (e.g. mycode.goatcounter.com)
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
