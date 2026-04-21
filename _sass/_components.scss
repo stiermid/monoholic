@@ -7,7 +7,7 @@
     margin-bottom: 0.75rem;
     display: flex;
     align-items: baseline;
-    gap: 1rem;
+    gap: var(--space-md);
     flex-wrap: wrap; // Mobile safety
   }
 }
@@ -17,8 +17,8 @@
 }
 
 .site-footer {
-  padding-top: 2rem;
-  font-size: 0.85rem;
+  padding-top: var(--space-xl);
+  font-size: var(--font-size-sm);
   color: var(--meta-color);
 
   .footer-col {
@@ -34,8 +34,8 @@
 
 .page-content {
   .post-title {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: var(--font-size-post-title);
+    margin-bottom: var(--space-sm);
   }
 
   .post-meta {
