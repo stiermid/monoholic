@@ -1,0 +1,25 @@
+.wrapper {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-3xl) var(--space-xl);
+}
+
+.site-header {
+  margin: var(--space-2xl) 0;
+
+  .site-title {
+    font-size: var(--font-size-site-title);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+}
+
+.section-title {
+  font-size: var(--font-size-section);
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+}
+
+section {
+  margin-bottom: var(--space-xl);
+}

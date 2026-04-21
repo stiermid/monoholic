@@ -1,0 +1,40 @@
+.highlighter-rouge,
+highlight {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+div.highlighter-rouge {
+  code {
+    display: block;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+
+  pre.highlight {
+    padding: var(--space-md);
+  }
+}
+
+table {
+  width: 100%;
+  margin-bottom: var(--space-md);
+
+  &,
+  th,
+  td {
+    border: thin solid var(--meta-color);
+    border-collapse: collapse;
+    padding: var(--space-xs);
+  }
+}
+
+blockquote {
+  font-style: italic;
+  border: thin solid var(--border-color);
+  padding: var(--space-md);
+
+  p {
+    margin: 0;
+  }
+}
