@@ -11,12 +11,12 @@ div.highlighter-rouge code {
 }
 
 pre.highlight {
-  padding: 1rem;
+  padding: var(--space-md);
 }
 
 table {
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 
 table,
@@ -24,13 +24,13 @@ th,
 td {
   border: thin solid var(--meta-color);
   border-collapse: collapse;
-  padding: 0.4rem;
+  padding: var(--space-xs);
 }
 
 blockquote {
   font-style: italic;
   border: thin solid var(--border-color);
-  padding: 1rem;
+  padding: var(--space-md);
 
   p {
     margin: 0;
