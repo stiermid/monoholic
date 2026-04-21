@@ -1,0 +1,38 @@
+.highlighter-rouge,
+highlight {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+div.highlighter-rouge code {
+  display: block;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+pre.highlight {
+  padding: 1rem;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+table,
+th,
+td {
+  border: thin solid var(--meta-color);
+  border-collapse: collapse;
+  padding: 0.4rem;
+}
+
+blockquote {
+  font-style: italic;
+  border: thin solid var(--border-color);
+  padding: 1rem;
+
+  p {
+    margin: 0;
+  }
+}
