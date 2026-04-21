@@ -4,27 +4,29 @@ highlight {
   color: var(--bg-color);
 }
 
-div.highlighter-rouge code {
-  display: block;
-  overflow-x: auto;
-  white-space: pre-wrap;
-}
+div.highlighter-rouge {
+  code {
+    display: block;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
 
-pre.highlight {
-  padding: var(--space-md);
+  pre.highlight {
+    padding: var(--space-md);
+  }
 }
 
 table {
   width: 100%;
   margin-bottom: var(--space-md);
-}
 
-table,
-th,
-td {
-  border: thin solid var(--meta-color);
-  border-collapse: collapse;
-  padding: var(--space-xs);
+  &,
+  th,
+  td {
+    border: thin solid var(--meta-color);
+    border-collapse: collapse;
+    padding: var(--space-xs);
+  }
 }
 
 blockquote {
