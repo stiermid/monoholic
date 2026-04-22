@@ -69,6 +69,16 @@ theme_config:
   footer: true # Show/hide site footer (default: true)
 ```
 
+### Analytics
+
+Monoholic has built-in support for [GoatCounter](https://www.goatcounter.com/), a privacy-friendly analytics platform. Add your GoatCounter subdomain to `_config.yml`:
+
+```yaml
+goatcounter: your-subdomain
+```
+
+This injects the GoatCounter tracking script on every page. Remove the key entirely to disable analytics.
+
 ### Menu Configuration
 
 Monoholic uses a data-driven approach to its menu. Create or edit `_data/menu.yml` to define your site's navigation structure.
@@ -90,6 +100,23 @@ entries:
 - `content_file`: Path to an external markdown file (e.g., `about.md`) to load content from your root directory.
 - `post_list`: Set to `true` to auto-generate a list of your Jekyll posts under this section.
 
+#### Nested Menu Sections
+
+Menu entries can contain nested `entries` to create recursive sub-sections:
+
+```yaml
+entries:
+  - title: projects
+    entries:
+      - title: web
+        content: |
+          <p>Web projects here.</p>
+      - title: archive
+        post_list: true
+```
+
+Nesting can go as deep as needed — `menu.html` includes itself recursively for each `entries` array it encounters.
+
 #### Using External Content Files
 
 You can reference external markdown files instead of inline content:
@@ -101,6 +128,21 @@ entries:
 ```
 
 This will load and render the content from `about.md` in your site's root directory.
+
+### Per-Page JavaScript
+
+To load custom JavaScript files on a specific page, add a `custom_js` list to the page's front matter:
+
+```yaml
+---
+layout: post
+custom_js:
+  - my-script
+  - chart
+---
+```
+
+Each entry is a filename (without `.js`) relative to `assets/js/`. The example above loads `assets/js/my-script.js` and `assets/js/chart.js` at the bottom of the page body.
 
 ## Contributing
 
