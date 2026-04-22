@@ -24,6 +24,7 @@
   .footer-col {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
   }
 
@@ -33,13 +34,9 @@
 }
 
 .page-content {
-  .post-title {
-    font-size: var(--font-size-post-title);
-    margin-bottom: var(--space-sm);
-  }
-
   .post-meta {
     color: var(--meta-color);
     display: block;
+    text-align: right;
   }
 }
