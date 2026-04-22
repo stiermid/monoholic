@@ -4,7 +4,7 @@
       <span class="post-meta">
         * {{ post.date | date: site.theme_config.date_format }}
       </span>
-      <a class="post-link" href="{{ post.url | relative_url }}">
+      <a href="{{ post.url | relative_url }}">
         {{ post.title | escape }}
       </a>
     </li>
