@@ -6,7 +6,9 @@
         | where: 'path', item.content_file
         | first
       -%}
-      {{ _menu_page.content | markdownify }}
+      {%- if _menu_page -%}
+        {{ _menu_page.content | markdownify }}
+      {%- endif -%}
     {%- elsif item.content -%}
       {{ item.content }}
     {%- endif -%}
