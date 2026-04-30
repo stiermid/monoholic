@@ -13,7 +13,9 @@
 }
 
 .post-meta {
+  display: block;
   color: var(--meta-color);
+  margin-bottom: var(--space-md);
 }
 
 .site-footer {
