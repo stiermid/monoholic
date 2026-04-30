@@ -1,11 +1,11 @@
 ---
 layout: default
 ---
-<a href="{{ '/' | relative_url }}">{{ site.theme_config.back }}</a>
+<a href="{{ '/' | relative_url }}">{{ site.theme_config.back | default: "Back" }}</a>
 
 <article>
   <span class="post-meta">
-    {{ page.date | date: site.theme_config.date_format }}
+    {% assign _date_fmt = site.theme_config.date_format | default: "%Y-%m-%d" %}{{ page.date | date: _date_fmt }}
   </span>
   <h1>{{ page.title }}</h1>
 
