@@ -16,10 +16,21 @@
   }
 }
 
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-lg);
+}
+
 .post-meta {
   display: block;
   color: var(--meta-color);
   margin-bottom: var(--space-lg);
+
+  .post-header & {
+    margin-bottom: 0;
+  }
 }
 
 .site-footer {
@@ -36,13 +47,5 @@
 
   p {
     margin: 0;
-  }
-}
-
-.page-content {
-  .post-meta {
-    color: var(--meta-color);
-    display: block;
-    text-align: right;
   }
 }
