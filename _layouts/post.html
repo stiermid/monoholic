@@ -3,9 +3,14 @@ layout: default
 ---
 <article>
   <div class="post-header">
-    <a href="{{ '/' | relative_url }}">{{ site.theme_config.back | default: "Back" }}</a>
+    <a href="{{ '/' | relative_url }}">
+      {{ site.theme_config.back | default: 'Back' }}
+    </a>
     <span class="post-meta">
-      {% assign _date_fmt = site.theme_config.date_format | default: "%Y-%m-%d" %}{{ page.date | date: _date_fmt }}
+      {% assign _date_fmt = site.theme_config.date_format
+        | default: '%Y-%m-%d'
+      %}
+      {{ page.date | date: _date_fmt }}
     </span>
   </div>
   <h1>{{ page.title }}</h1>
