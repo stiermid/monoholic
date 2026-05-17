@@ -129,6 +129,14 @@ entries:
 
 This will load and render the content from `about.md` in your site's root directory.
 
+### Favicon
+
+Monoholic ships with a default favicon. To use your own, replace the following files in your site's `assets/` directory:
+
+- `assets/favicon.ico` — legacy browsers
+- `assets/favicon.svg` — modern browsers
+- `assets/apple-touch-icon.png` — iOS home screen (180×180)
+
 ### Per-Page JavaScript
 
 To load custom JavaScript files on a specific page, add a `custom_js` list to the page's front matter:
