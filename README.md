@@ -69,6 +69,22 @@ theme_config:
   footer: true # Show/hide site footer (default: true)
 ```
 
+### Fediverse Creator tag
+
+Monoholic supports `fediverse:creator` meta tag:
+
+```yaml
+fediverse_creator: @username@social.example.com
+```
+
+Setting `fediverse_creator` tag appends following tag to the site's header:
+
+```html
+<meta name="fediverse:creator" content="@username@social.example.com">
+```
+
+[See Also](https://docs.joinmastodon.org/user/profile/#attribution)
+
 ### Analytics
 
 Monoholic has built-in support for [GoatCounter](https://www.goatcounter.com/), a privacy-friendly analytics platform. Add your GoatCounter subdomain to `_config.yml`:
