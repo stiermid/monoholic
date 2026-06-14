@@ -74,7 +74,7 @@ theme_config:
 Monoholic supports `fediverse:creator` meta tag:
 
 ```yaml
-fediverse_creator: @username@social.example.com
+fediverse_creator: "@username@social.example.com"
 ```
 
 Setting `fediverse_creator` tag appends following tag to the site's header:
