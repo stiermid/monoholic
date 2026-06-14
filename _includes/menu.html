@@ -1,6 +1,6 @@
 {%- for item in include.collection -%}
   <section>
-    <h2 class="section-title">// {{ item.title }} //</h2>
+    <h2 class="section-title">## {{ item.title }}</h2>
     {%- if item.content_file -%}
       {%- assign _menu_page = site.pages
         | where: 'path', item.content_file
