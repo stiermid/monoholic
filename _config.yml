@@ -18,7 +18,6 @@ theme_config:
   monochrome_images: true
   footer: true # set to false to hide the footer
 
-# goatcounter: mycode # your GoatCounter site code (e.g. mycode.goatcounter.com)
 # fediverse_creator: "@example@example.social" # this enables author attirbution
 
 plugins:
