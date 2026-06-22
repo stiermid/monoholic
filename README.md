@@ -85,16 +85,6 @@ Setting `fediverse_creator` tag appends following tag to the site's header:
 
 [See Also](https://docs.joinmastodon.org/user/profile/#attribution)
 
-### Analytics
-
-Monoholic has built-in support for [GoatCounter](https://www.goatcounter.com/), a privacy-friendly analytics platform. Add your GoatCounter subdomain to `_config.yml`:
-
-```yaml
-goatcounter: your-subdomain
-```
-
-This injects the GoatCounter tracking script on every page. Remove the key entirely to disable analytics.
-
 ### Menu Configuration
 
 Monoholic uses a data-driven approach to its menu. Create or edit `_data/menu.yml` to define your site's navigation structure.
