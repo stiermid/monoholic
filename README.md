@@ -8,10 +8,6 @@
 
 A minimal, monochrome dark Jekyll theme🧪
 
-<h3 align="center"><a href="https://stiermid.github.io/monoholic">Try the demo out!</a></h3>
-
-![Screenshot of homepage](./_screenshots/home.png)
-
 ## Features
 
 - Minimalist dark monochrome design
