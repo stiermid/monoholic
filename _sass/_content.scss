@@ -1,3 +1,11 @@
+code {
+  font-family: var(--font-family);
+  padding: 0.1em 0.3em;
+  border: thin solid var(--border-color);
+  border-radius: 2px;
+  font-size: 0.9em;
+}
+
 .highlighter-rouge,
 highlight {
   background-color: var(--text-color);
@@ -9,12 +17,37 @@ div.highlighter-rouge {
     display: block;
     overflow-x: auto;
     white-space: pre-wrap;
+    border: 0;
+    padding: 0;
+    background: transparent;
   }
 
   pre.highlight {
     padding: var(--space-md);
   }
 }
+
+// Rouge syntax tokens — monochrome palette so tokens remain visible
+// against the inverted block. Tones vary via brightness only.
+.highlight .k,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt { color: #f5f5f5; font-weight: 700; }
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sb { color: #b0b0b0; }
+.highlight .c,
+.highlight .c1,
+.highlight .cm { color: #777777; font-style: italic; }
+.highlight .n,
+.highlight .nf,
+.highlight .nc,
+.highlight .nb { color: #ffffff; }
+.highlight .mi,
+.highlight .mf  { color: #d0d0d0; }
 
 table {
   width: 100%;
