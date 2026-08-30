@@ -14,6 +14,7 @@ A minimal, monochrome dark Jekyll theme🧪
 - Data-driven menu via `_data/menu.yml`
 - Optional grayscale image filter
 - SEO & RSS support
+- SCSS source compiled via `jekyll-sass-converter`
 
 ## Installation
 
@@ -138,6 +139,22 @@ Monoholic ships with a default favicon. To use your own, replace the following f
 - `assets/favicon.ico` — legacy browsers
 - `assets/favicon.svg` — modern browsers
 - `assets/apple-touch-icon.png` — iOS home screen (180×180)
+
+### Stylesheet
+
+Monoholic's stylesheet is written in SCSS and compiled at build time. The source lives in `_sass/` and is imported from `assets/css/style.scss`. Compilation is handled by `jekyll-sass-converter`, which is declared as a runtime dependency in the theme's `gemspec` — so no extra setup is required when you add `gem "monoholic"` to your `Gemfile`.
+
+If you want to override or extend the styles, the recommended approach is to add your own partials in your site's `_sass/` directory and import them **after** the theme's entry point:
+
+```scss
+---
+---
+
+@import "monoholic";
+@import "your-overrides";
+```
+
+To override CSS custom properties (colors, spacing, fonts) without touching SCSS, redeclare the variables in your own stylesheet — they are exposed under `:root` in `_sass/_variables.scss`.
 
 ### Per-Page JavaScript
 

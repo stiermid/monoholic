@@ -3,8 +3,5 @@
 source "https://rubygems.org"
 gemspec
 
+# erb was removed from Ruby's default gems in 3.4; required by jekyll 4.4.
 gem "erb", "~> 6.0"
-gem "webrick", "~> 1.9"
-gem "base64", "~> 0.3.0"
-gem "mutex_m", "~> 0.3.0"
-gem "logger", "~> 1.7"
