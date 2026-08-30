@@ -24,6 +24,9 @@ jobs:
           bundler-cache: true
       - name: Build Jekyll site
         run: bundle exec jekyll build
+      - name: Verify compiled stylesheet
+        run: |
+          test -s _site/assets/css/style.css || (echo "::error::Compiled stylesheet missing or empty: _site/assets/css/style.css" && exit 1)
       - name: Build gem
         run: gem build *.gemspec
 

@@ -13,8 +13,7 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_data|_layouts|_includes|_sass|LICENSE|README)!i) }
 
   spec.add_runtime_dependency "jekyll", "~> 4.4"
-  spec.add_runtime_dependency "erb"
-  spec.add_runtime_dependency "webrick"
+  spec.add_runtime_dependency "jekyll-sass-converter", "~> 3.0"
   spec.add_runtime_dependency "jekyll-feed", "~> 0.12"
   spec.add_runtime_dependency "jekyll-seo-tag", "~> 2.8"
 end
