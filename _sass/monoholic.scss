@@ -1,6 +1,6 @@
 // monoholic.scss
-@import "variables";
-@import "base";
-@import "content";
-@import "layout";
-@import "components";
+@use "variables";
+@use "base";
+@use "content";
+@use "layout";
+@use "components";
