@@ -3,6 +3,8 @@
 .jekyll-cache
 .sass-cache
 _site
-Gemfile.lock
+
+# Gemfile.lock is intentionally committed (theme doubles as GitHub Pages demo site)
+# — ensures reproducible CI builds with bundler-cache
 
 node_modules/
