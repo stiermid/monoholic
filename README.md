@@ -142,16 +142,16 @@ Monoholic ships with a default favicon. To use your own, replace the following f
 
 ### Stylesheet
 
-Monoholic's stylesheet is written in SCSS and compiled at build time. The source lives in `_sass/` and is imported from `assets/css/style.scss`. Compilation is handled by `jekyll-sass-converter`, which is declared as a runtime dependency in the theme's `gemspec` — so no extra setup is required when you add `gem "monoholic"` to your `Gemfile`.
+Monoholic's stylesheet is written in SCSS and compiled at build time. The source lives in `_sass/` and is loaded from `assets/css/style.scss`. Compilation is handled by `jekyll-sass-converter`, which is declared as a runtime dependency in the theme's `gemspec` — so no extra setup is required when you add `gem "monoholic"` to your `Gemfile`.
 
-If you want to override or extend the styles, the recommended approach is to add your own partials in your site's `_sass/` directory and import them **after** the theme's entry point:
+If you want to override or extend the styles, the recommended approach is to add your own partials in your site's `_sass/` directory and load them **after** the theme's entry point:
 
 ```scss
 ---
 ---
 
-@import "monoholic";
-@import "your-overrides";
+@use "monoholic";
+@use "your-overrides";
 ```
 
 To override CSS custom properties (colors, spacing, fonts) without touching SCSS, redeclare the variables in your own stylesheet — they are exposed under `:root` in `_sass/_variables.scss`.
