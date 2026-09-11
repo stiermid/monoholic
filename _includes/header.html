@@ -1,5 +1,15 @@
 <header class="site-header" role="banner">
-  <a class="site-title" rel="author" href="{{ "/" | relative_url }}">
-    {{ site.title | escape }}
-  </a>
+  {%- if page.layout == "home" -%}
+    <h1 class="site-title">
+      <a rel="author" href="{{ "/" | relative_url }}">
+        {{ site.title | escape }}
+      </a>
+    </h1>
+  {%- else -%}
+    <p class="site-title">
+      <a rel="author" href="{{ "/" | relative_url }}">
+        {{ site.title | escape }}
+      </a>
+    </p>
+  {%- endif -%}
 </header>

@@ -1,6 +1,60 @@
+{%- assign _level = include.level | default: 2 | plus: 0 -%}
+{%- if _level < 2 -%}
+  {%- assign _level = 2 -%}
+{%- elsif _level > 6 -%}
+  {%- assign _level = 6 -%}
+{%- endif -%}
+{%- assign _next_level = _level | plus: 1 -%}
+{%- if _next_level > 6 -%}
+  {%- assign _next_level = 6 -%}
+{%- endif -%}
 {%- for item in include.collection -%}
-  <section>
-    <h2 class="section-title">## {{ item.title }}</h2>
+  {%- assign _title_slug = item.title | slugify -%}
+  {%- if _title_slug == empty or _title_slug == nil -%}
+    {%- assign _title_slug = 'section' -%}
+  {%- endif -%}
+  {%- if include.parent_id -%}
+    {%- assign _heading_id = include.parent_id
+      | append: '-'
+      | append: _title_slug
+      | append: '-'
+      | append: forloop.index
+    -%}
+  {%- elsif include.id_prefix -%}
+    {%- assign _heading_id = include.id_prefix
+      | append: '-'
+      | append: _title_slug
+      | append: '-'
+      | append: forloop.index
+    -%}
+  {%- else -%}
+    {%- assign _heading_id = _title_slug
+      | append: '-'
+      | append: forloop.index
+    -%}
+  {%- endif -%}
+  <section aria-labelledby="{{ _heading_id }}">
+    {%- if _level == 3 -%}
+      <h3 class="section-title" id="{{ _heading_id }}">
+        {{ item.title | escape }}
+      </h3>
+    {%- elsif _level == 4 -%}
+      <h4 class="section-title" id="{{ _heading_id }}">
+        {{ item.title | escape }}
+      </h4>
+    {%- elsif _level == 5 -%}
+      <h5 class="section-title" id="{{ _heading_id }}">
+        {{ item.title | escape }}
+      </h5>
+    {%- elsif _level >= 6 -%}
+      <h6 class="section-title" id="{{ _heading_id }}">
+        {{ item.title | escape }}
+      </h6>
+    {%- else -%}
+      <h2 class="section-title" id="{{ _heading_id }}">
+        {{ item.title | escape }}
+      </h2>
+    {%- endif -%}
     {%- if item.content_file -%}
       {%- assign _menu_page = site.pages
         | where: 'path', item.content_file
@@ -13,8 +67,12 @@
       {{ item.content }}
     {%- endif -%}
     {%- if item.post_list -%}{%- include post_list.html -%}{%- endif -%}
+    {%- if item.entries -%}
+      {%- include menu.html
+        collection=item.entries
+        level=_next_level
+        parent_id=_heading_id
+      -%}
+    {%- endif -%}
   </section>
-  {%- if item.entries -%}
-    {%- include menu.html collection = item.entries -%}
-  {%- endif -%}
 {%- endfor -%}
