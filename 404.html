@@ -6,6 +6,6 @@ permalink: /404.html
   <p class="error-code">404</p>
   <h1>page not found</h1>
   <a href="{{ '/' | relative_url }}">
-    {{ site.theme_config.back | default: 'Back' }}
+    {{ site.theme_config.back | default: 'Back' | escape }}
   </a>
 </article>

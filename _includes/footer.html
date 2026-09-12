@@ -1,10 +1,11 @@
 <footer class="site-footer h-card">
-  <data class="u-url" href="{{ "/" | relative_url }}"></data>
   <div class="wrapper">
     <div class="footer-col">
       <p>
         &copy; {{ 'now' | date: '%Y' }}
-        {{ site.title | upcase }}
+        <a class="u-url" href="{{ '/' | relative_url }}">
+          {{- site.title | upcase | escape -}}
+        </a>
       </p>
     </div>
   </div>

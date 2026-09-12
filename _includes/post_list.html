@@ -1,12 +1,15 @@
 <ul class="post-list">
   {%- for post in site.posts -%}
     <li>
-      <span class="post-meta">
+      <time
+        class="post-meta dt-published"
+        datetime="{{ post.date | date_to_xmlschema }}"
+      >
         {% assign _date_fmt = site.theme_config.date_format
           | default: '%Y-%m-%d'
         %}
         * {{ post.date | date: _date_fmt }}
-      </span>
+      </time>
       <a href="{{ post.url | relative_url }}">
         {{ post.title | escape }}
       </a>
