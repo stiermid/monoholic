@@ -33,6 +33,22 @@ a {
   text-decoration: underline;
 }
 
+.skip-link {
+  position: absolute;
+  top: -1000px;
+  left: var(--space-md);
+  z-index: 100;
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  padding: var(--space-sm) var(--space-md);
+  text-decoration: none;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: var(--space-sm);
+}
+
 img {
   max-width: 100%;
   display: block;
