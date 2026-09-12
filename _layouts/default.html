@@ -3,11 +3,12 @@
   {%- include head.html -%}
   <body class="{% if site.theme_config.monochrome_images != false %}images-monochrome{% endif %}">
     <a class="skip-link" href="#main">Skip to content</a>
-    <main id="main" class="page-content">
-      <div class="wrapper">
+    <div class="wrapper">
+      {%- include header.html -%}
+      <main id="main" class="page-content">
         {{ content }}
-      </div>
-    </main>
+      </main>
+    </div>
 
     {%- unless site.theme_config.footer == false -%}
       {%- include footer.html -%}
