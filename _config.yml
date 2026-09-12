@@ -10,6 +10,8 @@ github_username: "stiermid"
 
 # Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
 remote_theme: stiermid/monoholic
 
 theme_config:

@@ -19,7 +19,7 @@
     {% if page.custom_js %}
       {% for js_file in page.custom_js %}
         <script
-          type="text/javascript"
+          defer
           src="{{ '/assets/js/' | append: js_file | append: '.js' | relative_url }}"
         ></script>
       {% endfor %}

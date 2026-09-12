@@ -1,0 +1,5 @@
+# Placeholder to keep assets/js/ in version control.
+# Per-page scripts referenced via `custom_js` front matter live here,
+# e.g. `assets/js/my-script.js` loaded with:
+#   custom_js:
+#     - my-script
