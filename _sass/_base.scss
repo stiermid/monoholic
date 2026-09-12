@@ -33,12 +33,44 @@ a {
   text-decoration: underline;
 }
 
+:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -1000px;
+  left: var(--space-md);
+  z-index: 100;
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  padding: var(--space-sm) var(--space-md);
+  text-decoration: none;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: var(--space-sm);
+}
+
 img {
   max-width: 100%;
+  height: auto;
   display: block;
   margin: 0 auto;
 }
 
 .images-monochrome img {
   filter: grayscale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
