@@ -9,6 +9,11 @@
   {%- assign _next_level = 6 -%}
 {%- endif -%}
 {%- for item in include.collection -%}
+  {%- assign _title_stripped = item.title | strip -%}
+  {%- assign _has_title = true -%}
+  {%- if item.title == nil or _title_stripped == empty -%}
+    {%- assign _has_title = false -%}
+  {%- endif -%}
   {%- assign _title_slug = item.title | slugify -%}
   {%- if _title_slug == empty or _title_slug == nil -%}
     {%- assign _title_slug = 'section' -%}
@@ -33,28 +38,32 @@
       | append: forloop.index
     -%}
   {%- endif -%}
-  <section aria-labelledby="{{ _heading_id }}">
-    {%- if _level == 3 -%}
-      <h3 class="section-title" id="{{ _heading_id }}">
-        {{ item.title | escape }}
-      </h3>
-    {%- elsif _level == 4 -%}
-      <h4 class="section-title" id="{{ _heading_id }}">
-        {{ item.title | escape }}
-      </h4>
-    {%- elsif _level == 5 -%}
-      <h5 class="section-title" id="{{ _heading_id }}">
-        {{ item.title | escape }}
-      </h5>
-    {%- elsif _level >= 6 -%}
-      <h6 class="section-title" id="{{ _heading_id }}">
-        {{ item.title | escape }}
-      </h6>
-    {%- else -%}
-      <h2 class="section-title" id="{{ _heading_id }}">
-        {{ item.title | escape }}
-      </h2>
-    {%- endif -%}
+  {%- if _has_title -%}
+    <section aria-labelledby="{{ _heading_id }}">
+      {%- if _level == 3 -%}
+        <h3 class="section-title" id="{{ _heading_id }}">
+          {{ item.title | escape }}
+        </h3>
+      {%- elsif _level == 4 -%}
+        <h4 class="section-title" id="{{ _heading_id }}">
+          {{ item.title | escape }}
+        </h4>
+      {%- elsif _level == 5 -%}
+        <h5 class="section-title" id="{{ _heading_id }}">
+          {{ item.title | escape }}
+        </h5>
+      {%- elsif _level >= 6 -%}
+        <h6 class="section-title" id="{{ _heading_id }}">
+          {{ item.title | escape }}
+        </h6>
+      {%- else -%}
+        <h2 class="section-title" id="{{ _heading_id }}">
+          {{ item.title | escape }}
+        </h2>
+      {%- endif -%}
+  {%- else -%}
+    <section>
+  {%- endif -%}
     {%- if item.content_file -%}
       {%- assign _menu_page = site.pages
         | where: 'path', item.content_file
