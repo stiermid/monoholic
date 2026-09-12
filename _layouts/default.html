@@ -4,7 +4,9 @@
   <body class="{% if site.theme_config.monochrome_images != false %}images-monochrome{% endif %}">
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="wrapper">
-      {%- include header.html -%}
+      {%- unless page.layout == 'post' -%}
+        {%- include header.html -%}
+      {%- endunless -%}
       <main id="main" class="page-content">
         {{ content }}
       </main>
