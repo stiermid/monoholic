@@ -33,6 +33,11 @@ a {
   text-decoration: underline;
 }
 
+:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: 2px;
+}
+
 .skip-link {
   position: absolute;
   top: -1000px;
