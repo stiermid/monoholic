@@ -38,13 +38,19 @@ theme: monoholic
 $ bundle install
 ```
 
-### Manual Installation
+### Manual Installation (GitHub Pages)
 
 If you're running Jekyll without RubyGems or prefer to use GitHub Pages remote themes, update your `_config.yml`:
 
 ```yaml
 remote_theme: stiermid/monoholic
+plugins:
+  - jekyll-remote-theme
+  - jekyll-feed
+  - jekyll-seo-tag
 ```
+
+`jekyll-remote-theme` fetches the theme on Pages; `jekyll-feed` and `jekyll-seo-tag` are required by the theme's `head.html` (`{% feed_meta %}`, `{% seo %}`). For project sites, also set `baseurl` (e.g. `/your-repo`) and `url` (e.g. `https://<user>.github.io`). To pin a release: `remote_theme: stiermid/monoholic@v1.1.1`.
 
 Or, simply fork this repository, adapt the `_config.yml` according to your needs, and you're good to go!
 
@@ -142,17 +148,19 @@ Monoholic ships with a default favicon. To use your own, replace the following f
 
 ### Stylesheet
 
-Monoholic's stylesheet is written in SCSS and compiled at build time. The source lives in `_sass/` and is loaded from `assets/css/style.scss`. Compilation is handled by `jekyll-sass-converter`, which is declared as a runtime dependency in the theme's `gemspec` — so no extra setup is required when you add `gem "monoholic"` to your `Gemfile`.
+Monoholic's stylesheet is written in SCSS and compiled at build time. The source lives in `_sass/` and is imported from `assets/css/style.scss`. Compilation is handled by `jekyll-sass-converter`, which is declared as a runtime dependency in the theme's `gemspec` — so no extra setup is required when you add `gem "monoholic"` to your `Gemfile`.
 
-If you want to override or extend the styles, the recommended approach is to add your own partials in your site's `_sass/` directory and load them **after** the theme's entry point:
+If you want to override or extend the styles, the recommended approach is to add your own partials in your site's `_sass/` directory and import them **after** the theme's entry point:
 
 ```scss
 ---
 ---
 
-@use "monoholic";
-@use "your-overrides";
+@import "monoholic";
+@import "your-overrides";
 ```
+
+Note: the theme uses `@import` (not `@use`) to stay compatible with GitHub Pages' Sass stack.
 
 To override CSS custom properties (colors, spacing, fonts) without touching SCSS, redeclare the variables in your own stylesheet — they are exposed under `:root` in `_sass/_variables.scss`.
 
