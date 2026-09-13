@@ -31,6 +31,8 @@ jobs:
           if grep -q '@use' _site/assets/css/style.css; then echo "::error::Compiled stylesheet contains raw @use (Dart Sass-only syntax, breaks GitHub Pages)" && exit 1; fi
       - name: Build Jekyll site (Pages safe mode)
         run: |
+          # Approximates Pages safe-mode on Jekyll 4.4; does not replicate true Pages 3.9 + remote_theme graph.
+          # NOTE: `whitelist` is intentional — Jekyll 4.4.1 only honors `whitelist` (see plugin_manager.rb); `safelist`/`allowlist` are ignored and break this check.
           printf 'whitelist:\n  - jekyll-feed\n  - jekyll-seo-tag\n' > /tmp/_pages_safe.yml
           bundle exec jekyll build --safe --config _config.yml,/tmp/_pages_safe.yml --destination _site_safe
       - name: Verify Pages-compatible stylesheet

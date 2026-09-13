@@ -9,6 +9,10 @@ url: "https://stiermid.github.io" # the base hostname & protocol for your site, 
 github_username: "stiermid"
 
 # Build settings
+# Theme usage:
+# - Local dev of this repo: neither `theme:` nor `remote_theme:` (files are local).
+# - RubyGems consumers (Jekyll 4.4): `theme: monoholic`
+# - GitHub Pages (Jekyll 3.9): `remote_theme: stiermid/monoholic@v1.1.0`
 markdown: kramdown
 kramdown:
   input: GFM
