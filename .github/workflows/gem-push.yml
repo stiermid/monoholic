@@ -27,6 +27,17 @@ jobs:
       - name: Verify compiled stylesheet
         run: |
           test -s _site/assets/css/style.css || (echo "::error::Compiled stylesheet missing or empty: _site/assets/css/style.css" && exit 1)
+          grep -q ':root' _site/assets/css/style.css || (echo "::error::Compiled stylesheet missing :root block" && exit 1)
+          if grep -q '@use' _site/assets/css/style.css; then echo "::error::Compiled stylesheet contains raw @use (Dart Sass-only syntax, breaks GitHub Pages)" && exit 1; fi
+      - name: Build Jekyll site (Pages safe mode)
+        run: |
+          printf 'whitelist:\n  - jekyll-feed\n  - jekyll-seo-tag\n' > /tmp/_pages_safe.yml
+          bundle exec jekyll build --safe --config _config.yml,/tmp/_pages_safe.yml --destination _site_safe
+      - name: Verify Pages-compatible stylesheet
+        run: |
+          test -s _site_safe/assets/css/style.css || (echo "::error::Pages safe-mode stylesheet missing or empty: _site_safe/assets/css/style.css" && exit 1)
+          grep -q ':root' _site_safe/assets/css/style.css || (echo "::error::Pages safe-mode stylesheet missing :root block" && exit 1)
+          if grep -q '@use' _site_safe/assets/css/style.css; then echo "::error::Pages safe-mode stylesheet contains raw @use (Dart Sass-only syntax, breaks GitHub Pages)" && exit 1; fi
       - name: Build gem
         run: gem build *.gemspec
 
