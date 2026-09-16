@@ -12,7 +12,7 @@ github_username: "stiermid"
 # Theme usage:
 # - Local dev of this repo: neither `theme:` nor `remote_theme:` (files are local).
 # - RubyGems consumers (Jekyll 4.4): `theme: monoholic`
-# - GitHub Pages (Jekyll 3.9): `remote_theme: stiermid/monoholic@v1.1.0`
+# - GitHub Pages (Jekyll 3.9): `remote_theme: stiermid/monoholic@v1.2.0`
 markdown: kramdown
 kramdown:
   input: GFM

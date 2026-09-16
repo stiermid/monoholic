@@ -50,14 +50,14 @@ plugins:
   - jekyll-seo-tag
 ```
 
-`jekyll-remote-theme` fetches the theme on Pages; `jekyll-feed` and `jekyll-seo-tag` are required by the theme's `head.html` (`{% feed_meta %}`, `{% seo %}`). For project sites, also set `baseurl` (e.g. `/your-repo`) and `url` (e.g. `https://<user>.github.io`). To pin a release: `remote_theme: stiermid/monoholic@v1.1.0`.
+`jekyll-remote-theme` fetches the theme on Pages; `jekyll-feed` and `jekyll-seo-tag` are required by the theme's `head.html` (`{% feed_meta %}`, `{% seo %}`). For project sites, also set `baseurl` (e.g. `/your-repo`) and `url` (e.g. `https://<user>.github.io`). To pin a release: `remote_theme: stiermid/monoholic@v1.2.0`.
 
 > **Pages note:** Native GitHub Pages builds run Jekyll 3.9. The `monoholic` RubyGem requires Jekyll 4.4, so on GitHub Pages use `remote_theme` only (not `theme:` + `gem "monoholic"`). SCSS intentionally uses `@import` for 3.9 compatibility.
 
 | Install method                                           | Jekyll        | How                         |
 | -------------------------------------------------------- | ------------- | --------------------------- |
 | RubyGems (`theme: monoholic`)                            | 4.4           | local / CI / non-Pages host |
-| GitHub Pages (`remote_theme: stiermid/monoholic@v1.1.0`) | 3.9 via Pages | Pages only                  |
+| GitHub Pages (`remote_theme: stiermid/monoholic@v1.2.0`) | 3.9 via Pages | Pages only                  |
 
 Or, simply fork this repository, adapt the `_config.yml` according to your needs, and you're good to go!
 
