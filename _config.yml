@@ -3,7 +3,7 @@ title: "monoholic"
 author: Agil Mammadov
 email: mammadovagil@proton.me
 description: >
-  Minimal monochrome dark jekyll theme🧪
+  Minimal monochrome dark jekyll theme
 baseurl: "/monoholic" # the subpath of your site, e.g. /blog
 url: "https://stiermid.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username: "stiermid"
@@ -18,8 +18,8 @@ kramdown:
   input: GFM
 
 theme_config:
-  back: ".."
-  date_format: "%Y%m%d"
+  back: "Back"
+  date_format: "%Y-%m-%d"
   monochrome_images: true
   footer: true # set to false to hide the footer
 

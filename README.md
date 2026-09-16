@@ -6,7 +6,7 @@
 [![Gem Version](https://img.shields.io/gem/v/monoholic?color=black)](https://rubygems.org/gems/monoholic)
 [![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-ready-black?logo=github&logoColor=white)](https://stiermid.github.io/monoholic)
 
-A minimal, monochrome dark Jekyll theme🧪
+A minimal, monochrome dark Jekyll theme
 
 ## Features
 
@@ -73,8 +73,8 @@ Override the default settings in your `_config.yml`. Key theme configuration opt
 
 ```yaml
 theme_config:
-  back: ".." # Text for backlink on post pages
-  date_format: "%Y%m%d" # Date format for post metadata
+  back: "Back" # Text for backlink on post pages
+  date_format: "%Y-%m-%d" # Date format for post metadata
   monochrome_images: true # Apply grayscale filter to images (default: true)
   footer: true # Show/hide site footer (default: true)
 ```
