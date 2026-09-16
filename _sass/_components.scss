@@ -9,6 +9,13 @@
     align-items: baseline;
     gap: var(--space-md);
     flex-wrap: wrap; // Mobile safety
+
+    &::before {
+      content: "*";
+      color: var(--meta-color);
+      // Keep marker snug to the date (flex `gap` would push it too far).
+      margin-right: calc(1ch - var(--space-md));
+    }
   }
 
   .post-meta {
