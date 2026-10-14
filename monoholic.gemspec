@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "monoholic"
-  spec.version       = "1.2.0"
+  spec.version       = "1.3.0"
   spec.authors       = ["Agil Mammadov"]
   spec.email         = ["mammadovagil@proton.me"]
 
@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/stiermid/monoholic"
   spec.license       = "GPL-3.0-only"
 
-  spec.files         = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_data|_layouts|_includes|_sass|LICENSE|README|robots\.txt)!i) }
+  spec.files         = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_data|_layouts|_includes|_sass|LICENSE|README|CHANGELOG|robots\.txt)!i) }
 
   spec.add_runtime_dependency "jekyll", "~> 4.4"
   spec.add_runtime_dependency "jekyll-sass-converter", "~> 3.0"
