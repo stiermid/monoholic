@@ -174,6 +174,23 @@ Note: the theme uses `@import` (not `@use`) to stay compatible with GitHub Pages
 
 To override CSS custom properties (colors, spacing, fonts) without touching SCSS, redeclare the variables in your own stylesheet — they are exposed under `:root` in `_sass/_variables.scss`.
 
+### Responsive Content
+
+Long words, URLs, and inline code wrap when necessary. Plain and highlighted code blocks preserve indentation and source lines, scrolling horizontally inside the block instead of expanding the page.
+
+The small, dependency-free `assets/js/content-scroll.js` script progressively enhances tables with scroll containers while preserving native table semantics. Overflowing tables and code blocks receive a keyboard tab stop, an accessible name, and a visible scrolling hint. These are updated when the viewport, content dimensions, or fonts change; fitting content does not add automatic tab stops.
+
+Table captions are used as accessible names when available. Existing author-provided labels, descriptions, and tab indices are preserved. You can translate the default labels and hint in `_config.yml`:
+
+```yaml
+theme_config:
+  table_scroll_label: "Table"
+  code_scroll_label: "Code block"
+  scroll_hint: "Scroll horizontally to see more."
+```
+
+Without JavaScript, tables use fixed-layout, wrapping cells, and code blocks still scroll. For especially wide tables that should scroll even without JavaScript, supply a `.table-scroll` wrapper with `tabindex="0"`, `role="region"`, and an accessible name (`aria-label` or `aria-labelledby`). The enhancement reuses that wrapper rather than nesting another one.
+
 ### Per-Page JavaScript
 
 To load custom JavaScript files on a specific page, add a `custom_js` list to the page's front matter:
