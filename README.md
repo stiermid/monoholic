@@ -68,6 +68,8 @@ Or, simply fork this repository, adapt the `_config.yml` according to your needs
 
 Once installed, build your site using the provided layouts (`default`, `home`, `page`, `post`).
 
+On pages using the `home` layout, page content appears before the sections defined in `_data/menu.yml`.
+
 ### Configuration
 
 Override the default settings in your `_config.yml`. Key theme configuration options:
