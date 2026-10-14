@@ -25,7 +25,10 @@ class MenuLayoutChecks
       @site, @site.source, "", "menu-#{@count}.html"
     )
     page.data["layout"] = "page"
-    page.content = "<nav>{% include menu.html collection=site.data.menu.entries #{params} %}</nav>"
+    includes = Array(params).map do |arguments|
+      "{% include menu.html collection=site.data.menu.entries #{arguments} %}"
+    end
+    page.content = "<nav>#{includes.join}</nav>"
     output = Jekyll::Renderer.new(@site, page).run
     nav = output[/<nav\b[^>]*>.*?<\/nav>/m]
     raise "#{name}: missing menu" unless nav
@@ -52,7 +55,10 @@ class MenuLayoutChecks
     end
 
     sections = elements.select { |element| element.name == "section" }
-    assert_equal(entry_count(entries), sections.length, "#{name}: section count")
+    assert_equal(
+      entry_count(entries) * includes.length, sections.length,
+      "#{name}: section count"
+    )
     sections.each do |section|
       heading = section.elements.to_a.find do |element|
         element.name.match?(/\Ah\d+\z/)
@@ -148,6 +154,120 @@ Dir.mktmpdir("monoholic-menu-") do |source|
     "/blog/2026/01/01/example.html",
     REXML::XPath.first(document, "//a").attributes["href"],
     "post link preserves baseurl"
+  )
+
+  checks.check(
+    "sibling levels after recursive branches", [
+      {
+        "title" => "Parent", "entries" => [
+          {
+            "title" => "Child", "entries" => [
+              { "title" => "Grandchild" }, { "title" => "Grandchild" }
+            ]
+          },
+          { "title" => "Child" }
+        ]
+      },
+      {
+        "title" => "Next", "entries" => [
+          { "title" => "Branch", "entries" => [{ "title" => "Leaf" }] },
+          { "title" => "Branch" }
+        ]
+      },
+      { "title" => "Last" }
+    ],
+    headings: [
+      ["h2", "Parent"], ["h3", "Child"], ["h4", "Grandchild"],
+      ["h4", "Grandchild"], ["h3", "Child"], ["h2", "Next"],
+      ["h3", "Branch"], ["h4", "Leaf"], ["h3", "Branch"], ["h2", "Last"]
+    ],
+    ids: %w[
+      parent-1 parent-1-child-1 parent-1-child-1-grandchild-1
+      parent-1-child-1-grandchild-2 parent-1-child-2 next-2
+      next-2-branch-1 next-2-branch-1-leaf-1 next-2-branch-2 last-3
+    ]
+  )
+
+  checks.check(
+    "untitled groups do not skip heading levels", [
+      {
+        "entries" => [
+          {
+            "title" => "Visible", "entries" => [
+              { "title" => nil, "entries" => [
+                { "title" => "Nested" }, { "title" => "Nested" }
+              ] },
+              { "title" => "After Group" }
+            ]
+          }
+        ]
+      },
+      { "title" => "  ", "entries" => [
+        { "title" => "Other" }, { "title" => "Other" }
+      ] },
+      { "title" => "Last" }
+    ],
+    headings: [
+      ["h2", "Visible"], ["h3", "Nested"], ["h3", "Nested"],
+      ["h3", "After Group"], ["h2", "Other"], ["h2", "Other"], ["h2", "Last"]
+    ],
+    ids: %w[
+      section-1-visible-1 section-1-visible-1-section-1-nested-1
+      section-1-visible-1-section-1-nested-2 section-1-visible-1-after-group-2
+      section-2-other-1 section-2-other-2 last-3
+    ]
+  )
+
+  deep = { "title" => "Depth 8" }
+  7.downto(1) do |depth|
+    deep = { "title" => "Depth #{depth}", "entries" => [
+      deep, { "title" => "Sibling #{depth + 1}" }
+    ] }
+  end
+  checks.check(
+    "deep nesting caps headings without leaking to siblings",
+    [deep, { "title" => "After depth" }],
+    headings: [
+      ["h2", "Depth 1"], ["h3", "Depth 2"], ["h4", "Depth 3"],
+      ["h5", "Depth 4"], ["h6", "Depth 5"], ["h6", "Depth 6"],
+      ["h6", "Depth 7"], ["h6", "Depth 8"], ["h6", "Sibling 8"],
+      ["h6", "Sibling 7"], ["h6", "Sibling 6"], ["h6", "Sibling 5"],
+      ["h5", "Sibling 4"], ["h4", "Sibling 3"], ["h3", "Sibling 2"],
+      ["h2", "After depth"]
+    ]
+  )
+
+  checks.check(
+    "custom starting level survives recursion",
+    [*nested, { "title" => "Sibling" }], params: "level=5",
+    headings: [["h5", "Parent"], ["h6", "Child"], ["h5", "Sibling"]]
+  )
+  checks.check(
+    "non-numeric heading level", [{ "title" => "Title" }],
+    headings: [["h2", "Title"]], params: "level='invalid'"
+  )
+  checks.check(
+    "negative heading level", [{ "title" => "Title" }],
+    headings: [["h2", "Title"]], params: "level=-3"
+  )
+  checks.check(
+    "parent ID takes precedence over prefix", nested,
+    params: "level=3 parent_id='root' id_prefix='ignored'",
+    headings: [["h3", "Parent"], ["h4", "Child"]],
+    ids: %w[root-parent-1 root-parent-1-child-1]
+  )
+  checks.check(
+    "escaped ID prefix", nested, params: "id_prefix='primary&\"secondary'",
+    headings: [["h2", "Parent"], ["h3", "Child"]],
+    ids: ['primary&"secondary-parent-1', 'primary&"secondary-parent-1-child-1']
+  )
+  checks.check(
+    "independent menus on one page", nested,
+    params: ["id_prefix='first' level=2", "id_prefix='second' level=4"],
+    headings: [
+      ["h2", "Parent"], ["h3", "Child"], ["h4", "Parent"], ["h5", "Child"]
+    ],
+    ids: %w[first-parent-1 first-parent-1-child-1 second-parent-1 second-parent-1-child-1]
   )
 
   puts "Menu layout checks passed (#{checks.count} cases)."
