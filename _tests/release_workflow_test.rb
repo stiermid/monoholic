@@ -26,4 +26,20 @@ assert_equal(
   publish.fetch("if"), "publishing must be restricted to tag pushes"
 )
 
-puts "Release workflow guards passed (triggers, dependency, permissions)."
+steps = check.fetch("steps")
+tag_step = steps.find { |step| step["run"].to_s.include?("verify_release_tag.rb") }
+raise "Missing release tag validation" unless tag_step
+assert_equal(publish.fetch("if"), tag_step.fetch("if"), "tag validation event guard")
+assert_equal(
+  { "RELEASE_TAG" => "${{ github.ref_name }}" }, tag_step.fetch("env"),
+  "pass tag through the environment, not shell interpolation"
+)
+assert_equal(
+  'bundle exec ruby .github/scripts/verify_release_tag.rb "$RELEASE_TAG"',
+  tag_step.fetch("run"), "quote the release tag argument"
+)
+raise "Missing package consumer validation" unless steps.any? do |step|
+  step["run"].to_s.include?("_tests/package_consumer_test.rb")
+end
+
+puts "Release workflow guards passed (triggers, dependency, permissions, validation)."

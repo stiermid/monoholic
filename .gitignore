@@ -12,3 +12,6 @@ node_modules/
 # Browser regression tests
 _tests/.site/
 _tests/.artifacts/
+
+# Built release package and integrity manifest
+_tests/.release/
