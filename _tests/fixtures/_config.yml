@@ -1,0 +1,8 @@
+title: Monoholic
+url: "http://127.0.0.1:4173"
+baseurl: ""
+theme: monoholic
+ignore_theme_config: true
+markdown: kramdown
+kramdown:
+  input: GFM
