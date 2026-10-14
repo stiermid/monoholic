@@ -28,4 +28,31 @@ for (const width of widths) {
     ).toBeVisible();
     await expectNoPageOverflow(page);
   });
+
+  test(`long text and code fit a ${width}px viewport`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/content.html");
+    await expectNoPageOverflow(page);
+
+    const blocks = page.locator("main pre");
+    await expect(blocks).toHaveCount(2);
+    for (const block of await blocks.all()) {
+      await expect(block).toHaveCSS("white-space", "pre");
+      const dimensions = await block.evaluate((element) => ({
+        width: element.clientWidth,
+        content: element.scrollWidth,
+        text: element.textContent,
+      }));
+      expect(dimensions.content).toBeGreaterThan(dimensions.width);
+      expect(dimensions.text).toContain(
+        '\n  return "This deliberately long line',
+      );
+      await block.evaluate((element) => {
+        element.scrollLeft = element.scrollWidth;
+      });
+      expect(
+        await block.evaluate((element) => element.scrollLeft),
+      ).toBeGreaterThan(0);
+    }
+  });
 }

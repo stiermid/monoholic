@@ -4,16 +4,16 @@
   color: var(--bg-color);
 }
 
-div.highlighter-rouge {
-  code {
-    display: block;
-    overflow-x: auto;
-    white-space: pre-wrap;
-  }
+.page-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  // Keep indentation and source lines intact; scroll the block, not the page.
+  white-space: pre;
+  overflow-wrap: normal;
+}
 
-  pre.highlight {
-    padding: var(--space-md);
-  }
+div.highlighter-rouge pre.highlight {
+  padding: var(--space-md);
 }
 
 table {

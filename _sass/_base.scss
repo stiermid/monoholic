@@ -8,6 +8,8 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   line-height: 1.5;
+  // Break unusually long words and URLs only when they cannot fit.
+  overflow-wrap: anywhere;
   min-height: 100vh;
   margin: 0;
   padding: 0;
