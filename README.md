@@ -208,6 +208,20 @@ Each entry is a filename (without `.js`) relative to `assets/js/`. The example a
 
 ## Contributing
 
+### Running Tests
+
+```sh
+bundle install
+npm ci
+npx playwright install --with-deps chromium firefox webkit
+bundle exec ruby _tests/home_layout_test.rb
+npm run test:browser
+```
+
+Browser tests build and serve an isolated fixture site. They cover Chromium, Firefox, and WebKit at 320px, 375px, 768px, and 1280px, including long text, plain and highlighted code, Markdown and HTML tables, keyboard scrolling, resizing, and JavaScript-disabled layouts. External fonts are blocked so the tests do not depend on Google Fonts being available.
+
+To run one browser, use `npm run test:browser -- --project=chromium`. You can also set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to use a locally installed Chromium binary. Generated sites, screenshots, and traces are ignored by Git; CI retains failure diagnostics for seven days.
+
 Bug reports and pull requests are welcome on GitHub at [https://github.com/stiermid/monoholic](https://github.com/stiermid/monoholic). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](https://www.contributor-covenant.org/) code of conduct.
 
 ## License

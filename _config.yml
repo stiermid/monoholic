@@ -17,6 +17,10 @@ markdown: kramdown
 kramdown:
   input: GFM
 
+# Keep the browser test configuration out of the demo site's public output.
+exclude:
+  - playwright.config.js
+
 theme_config:
   back: "Back"
   date_format: "%Y-%m-%d"

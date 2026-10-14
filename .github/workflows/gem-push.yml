@@ -24,6 +24,26 @@ jobs:
           bundler-cache: true
       - name: Test homepage layout
         run: bundle exec ruby _tests/home_layout_test.rb
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Install browser test dependencies
+        run: npm ci
+      - name: Install browsers and system dependencies
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Test responsive content across browsers
+        run: npm run test:browser
+      - name: Upload browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failure-diagnostics
+          path: _tests/.artifacts/
+          retention-days: 7
+          if-no-files-found: ignore
+          include-hidden-files: true
       - name: Build Jekyll site
         run: bundle exec jekyll build
       - name: Verify compiled stylesheet
