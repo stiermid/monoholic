@@ -4,20 +4,22 @@
   color: var(--bg-color);
 }
 
-div.highlighter-rouge {
-  code {
-    display: block;
-    overflow-x: auto;
-    white-space: pre-wrap;
-  }
+.page-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  // Keep indentation and source lines intact; scroll the block, not the page.
+  white-space: pre;
+  overflow-wrap: normal;
+}
 
-  pre.highlight {
-    padding: var(--space-md);
-  }
+div.highlighter-rouge pre.highlight {
+  padding: var(--space-md);
 }
 
 table {
   width: 100%;
+  // Readable wrapping is the fallback when scripts are unavailable.
+  table-layout: fixed;
   margin-bottom: var(--space-md);
 
   &,
@@ -27,6 +29,26 @@ table {
     border-collapse: collapse;
     padding: var(--space-xs);
   }
+}
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-bottom: var(--space-md);
+
+  table {
+    // Keep native table layout and semantics inside the scroll container.
+    table-layout: auto;
+    overflow-wrap: normal;
+    margin-bottom: 0;
+  }
+}
+
+.scroll-hint {
+  color: var(--meta-color);
+  font-size: var(--font-size-sm);
+  margin-top: calc(-1 * var(--space-sm));
+  margin-bottom: var(--space-md);
 }
 
 blockquote {

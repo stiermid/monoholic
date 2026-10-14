@@ -16,6 +16,14 @@
       {%- include footer.html -%}
     {%- endunless -%}
 
+    <script
+      defer
+      src="{{ '/assets/js/content-scroll.js' | relative_url }}"
+      data-table-label="{{ site.theme_config.table_scroll_label | default: 'Table' | escape }}"
+      data-code-label="{{ site.theme_config.code_scroll_label | default: 'Code block' | escape }}"
+      data-scroll-hint="{{ site.theme_config.scroll_hint | default: 'Scroll horizontally to see more.' | escape }}"
+    ></script>
+
     {% if page.custom_js %}
       {% for js_file in page.custom_js %}
         <script

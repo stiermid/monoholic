@@ -8,3 +8,7 @@ _site
 # — ensures reproducible CI builds with bundler-cache
 
 node_modules/
+
+# Browser regression tests
+_tests/.site/
+_tests/.artifacts/
