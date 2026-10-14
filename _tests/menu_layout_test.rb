@@ -93,6 +93,8 @@ Dir.mktmpdir("monoholic-menu-") do |source|
     "destination" => File.join(source, "_site"),
     "theme" => "monoholic",
     "ignore_theme_config" => true,
+    "safe" => ENV["JEKYLL_SAFE"] == "1",
+    "whitelist" => %w[jekyll-feed jekyll-seo-tag jekyll-sitemap],
     "disable_disk_cache" => true,
     "future" => true,
     "baseurl" => "/blog",
@@ -270,5 +272,6 @@ Dir.mktmpdir("monoholic-menu-") do |source|
     ids: %w[first-parent-1 first-parent-1-child-1 second-parent-1 second-parent-1-child-1]
   )
 
-  puts "Menu layout checks passed (#{checks.count} cases)."
+  mode = site.safe ? "safe mode" : "normal mode"
+  puts "Menu layout checks passed (#{checks.count} cases, #{mode})."
 end

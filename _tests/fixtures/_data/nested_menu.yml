@@ -1,0 +1,21 @@
+entries:
+  - title: Parent
+    entries:
+      - title: Child
+        entries:
+          - title: Leaf
+      - title: Child
+  - title: Next
+    entries:
+      - title: Branch
+        entries:
+          - title: Leaf
+      - title: Branch
+  - entries:
+      - title: Group
+        entries:
+          - title: ""
+            entries:
+              - title: Deep group
+          - title: After group
+  - title: Last
