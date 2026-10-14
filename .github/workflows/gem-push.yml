@@ -9,7 +9,6 @@ on:
 
 jobs:
   check:
-    if: github.event_name == 'pull_request'
     name: Build check
     runs-on: ubuntu-latest
     permissions:
@@ -22,6 +21,15 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
+      - name: Test release workflow guards
+        run: bundle exec ruby _tests/release_workflow_test.rb
+      - name: Test release tag validation
+        run: bundle exec ruby _tests/release_tag_test.rb
+      - name: Verify release tag matches gem version
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        run: bundle exec ruby .github/scripts/verify_release_tag.rb "$RELEASE_TAG"
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
       - name: Test homepage layout
         run: bundle exec ruby _tests/home_layout_test.rb
       - name: Test recursive menu rendering
@@ -67,43 +75,84 @@ jobs:
           grep -q ':root' _site_safe/assets/css/style.css || (echo "::error::Pages safe-mode stylesheet missing :root block" && exit 1)
           if grep -q '@use' _site_safe/assets/css/style.css; then echo "::error::Pages safe-mode stylesheet contains raw @use (Dart Sass-only syntax, breaks GitHub Pages)" && exit 1; fi
       - name: Build gem
-        run: gem build *.gemspec
+        run: |
+          mkdir -p _tests/.release
+          bundle exec gem build monoholic.gemspec --output _tests/.release/monoholic.gem
+      - name: Test packaged gem in a clean consumer site
+        run: bundle exec ruby _tests/package_consumer_test.rb _tests/.release/monoholic.gem
+      - name: Verify invalid packages are rejected
+        run: bundle exec ruby _tests/package_consumer_negative_test.rb _tests/.release/monoholic.gem
+      - name: Record validated package checksum
+        working-directory: _tests/.release
+        run: sha256sum monoholic.gem > monoholic.gem.sha256
+      - name: Test package integrity verification
+        run: bundle exec ruby _tests/package_integrity_test.rb _tests/.release/monoholic.gem _tests/.release/monoholic.gem.sha256
+      - name: Upload validated release package
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: validated-gem
+          path: |
+            _tests/.release/monoholic.gem
+            _tests/.release/monoholic.gem.sha256
+          retention-days: 7
+          if-no-files-found: error
+          include-hidden-files: true
+          overwrite: true
 
   publish:
-    if: startsWith(github.ref, 'refs/tags/v')
-    name: Build + Publish
+    needs: check
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    name: Publish validated gem
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
 
     steps:
-      - uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
-          bundler-cache: true
+      - name: Download validated release package
+        uses: actions/download-artifact@v4
+        with:
+          name: validated-gem
+          path: release
+      - name: Verify validated package
+        working-directory: release
+        run: |
+          sha256sum --check --strict monoholic.gem.sha256
+          ruby -rrubygems/package <<'RUBY'
+          spec = Gem::Package.new("monoholic.gem").spec
+          unless spec.name == "monoholic" && "v#{spec.version}" == ENV.fetch("RELEASE_TAG")
+            abort "Downloaded package name or version does not match the release tag"
+          end
+          RUBY
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
 
       - name: Publish to GPR
+        working-directory: release
         run: |
-          mkdir -p $HOME/.gem
-          touch $HOME/.gem/credentials
-          chmod 0600 $HOME/.gem/credentials
-          printf -- "---\n:github: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
-          gem build *.gemspec
-          gem push --KEY github --host https://rubygems.pkg.github.com/${OWNER} *.gem
+          umask 077
+          mkdir -p "$HOME/.gem"
+          touch "$HOME/.gem/credentials"
+          chmod 0600 "$HOME/.gem/credentials"
+          printf -- "---\n:github: %s\n" "$GEM_HOST_API_KEY" > "$HOME/.gem/credentials"
+          gem push --KEY github --host "https://rubygems.pkg.github.com/${OWNER}" monoholic.gem
         env:
           GEM_HOST_API_KEY: "Bearer ${{secrets.GITHUB_TOKEN}}"
           OWNER: ${{ github.repository_owner }}
 
       - name: Publish to RubyGems
+        working-directory: release
         run: |
-          mkdir -p $HOME/.gem
-          touch $HOME/.gem/credentials
-          chmod 0600 $HOME/.gem/credentials
-          printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
-          gem build *.gemspec
-          gem push *.gem
+          umask 077
+          mkdir -p "$HOME/.gem"
+          touch "$HOME/.gem/credentials"
+          chmod 0600 "$HOME/.gem/credentials"
+          printf -- "---\n:rubygems_api_key: %s\n" "$GEM_HOST_API_KEY" > "$HOME/.gem/credentials"
+          gem push monoholic.gem
         env:
           GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_API_KEY}}"
