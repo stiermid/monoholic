@@ -23,7 +23,7 @@ version = Gem::Specification.load(File.join(root, "monoholic.gemspec")).version
 output, status = Open3.capture2e(RbConfig.ruby, script, "v#{version}")
 raise "Matching release tag failed: #{output}" unless status.success?
 
-[["v0.0.0"], [], ["v#{version}", "extra"]].each do |arguments|
+[["v#{version}.wrong"], [], ["v#{version}", "extra"]].each do |arguments|
   output, status = Open3.capture2e(RbConfig.ruby, script, *arguments)
   raise "Invalid CLI arguments succeeded: #{arguments.inspect}" if status.success?
   raise "Missing validation error" if output.strip.empty?

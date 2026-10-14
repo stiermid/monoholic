@@ -54,6 +54,9 @@ assert_equal(
   "error", upload.fetch("with").fetch("if-no-files-found"), "missing artifact must fail"
 )
 assert_equal(
+  true, upload.fetch("with").fetch("overwrite"), "validation reruns must replace the artifact"
+)
+assert_equal(
   %w[_tests/.release/monoholic.gem _tests/.release/monoholic.gem.sha256],
   upload.fetch("with").fetch("path").split, "release artifact contents"
 )

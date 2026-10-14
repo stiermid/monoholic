@@ -223,6 +223,8 @@ Each entry is a filename (without `.js`) relative to `assets/js/`. The example a
 bundle install
 npm ci
 npx playwright install --with-deps chromium firefox webkit
+bundle exec ruby _tests/release_workflow_test.rb
+bundle exec ruby _tests/release_tag_test.rb
 bundle exec ruby _tests/home_layout_test.rb
 bundle exec ruby _tests/menu_layout_test.rb
 JEKYLL_SAFE=1 bundle exec ruby _tests/menu_layout_test.rb
@@ -234,6 +236,32 @@ Browser tests build and serve an isolated fixture site. They cover Chromium, Fir
 Menu rendering checks cover branching recursion, deep nesting, untitled groups, repeated titles, unique IDs, escaped labels, and independent menu instances in normal and Jekyll safe mode. Browser tests also verify native heading and section semantics with JavaScript disabled.
 
 To run one browser, use `npm run test:browser -- --project=chromium`. You can also set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to use a locally installed Chromium binary. Generated sites, screenshots, and traces are ignored by Git; CI retains failure diagnostics for seven days.
+
+### Release Validation
+
+Both pull requests and release-tag pushes run the build and test checks. Publishing depends on all checks succeeding and is restricted to pushed `v*` tags; pull requests never publish. The tag must be `v` followed by the exact gem version in `monoholic.gemspec`, including any RubyGems prerelease suffix. Update the version metadata and lockfiles together before tagging.
+
+CI builds the gem once and installs it into a temporary gem home. A clean consumer site uses that installed package with the existing lockfile dependencies, without downloading gems or falling back to repository theme files. The checks build root and `/blog` sites and verify layouts, compiled CSS, scripts, favicons, feeds, and URLs. Negative tests reject broken packages and invalid versions.
+
+After validation, tag runs upload the gem and its SHA-256 manifest as a seven-day artifact. The publishing job downloads those same bytes, verifies the checksum and package name/version, and pushes the same gem to GitHub Packages and RubyGems—without checking out or rebuilding the source. Rerunning validation replaces the artifact only after checks succeed; if it has expired, rerun validation rather than just the publishing job.
+
+Publishing keeps the existing authentication: `GITHUB_TOKEN` with package-write permission for GitHub Packages, and the repository's `RUBYGEMS_API_KEY` secret for RubyGems. Validation has read-only repository permissions; registry credentials are used only by publishing steps.
+
+To exercise package checks locally without publishing (publisher verification requires Bash and `sha256sum` from GNU coreutils, matching the Linux CI runner):
+
+```sh
+mkdir -p _tests/.release
+bundle exec gem build monoholic.gemspec --output _tests/.release/monoholic.gem
+bundle exec ruby _tests/package_consumer_test.rb _tests/.release/monoholic.gem
+bundle exec ruby _tests/package_consumer_negative_test.rb _tests/.release/monoholic.gem
+(
+  cd _tests/.release
+  sha256sum monoholic.gem > monoholic.gem.sha256
+)
+bundle exec ruby _tests/package_integrity_test.rb _tests/.release/monoholic.gem _tests/.release/monoholic.gem.sha256
+```
+
+`package_integrity_test.rb` exercises the actual publisher verification recipe with valid, tampered, missing, and malformed inputs, plus a mismatched release tag. It never runs registry publishing commands. Release outputs are ignored by Git, and temporary package installations are removed after the checks finish.
 
 Bug reports and pull requests are welcome on GitHub at [https://github.com/stiermid/monoholic](https://github.com/stiermid/monoholic). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](https://www.contributor-covenant.org/) code of conduct.
 

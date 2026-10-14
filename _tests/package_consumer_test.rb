@@ -142,7 +142,12 @@ Dir.mktmpdir("monoholic-consumer-") do |root|
     "---\nlayout: post\ntitle: Example\n---\nPost content.\n\n```ruby\nputs 'hello'\n```\n"
   )
 
-  gem_paths = [gem_home, *Gem.path, *dependencies.map(&:base_dir)].uniq
+  # CI may keep dependencies in vendor/bundle while Bundler itself is installed
+  # elsewhere. Both must remain available in the isolated subprocess.
+  gem_paths = [
+    gem_home, *Gem.path, *dependencies.map(&:base_dir),
+    Gem.loaded_specs.fetch("bundler").base_dir
+  ].uniq
   environment = {
     "GEM_HOME" => gem_home,
     "GEM_PATH" => gem_paths.join(File::PATH_SEPARATOR),
