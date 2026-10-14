@@ -9,7 +9,6 @@ on:
 
 jobs:
   check:
-    if: github.event_name == 'pull_request'
     name: Build check
     runs-on: ubuntu-latest
     permissions:
@@ -22,6 +21,8 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
+      - name: Test release workflow guards
+        run: bundle exec ruby _tests/release_workflow_test.rb
       - name: Test homepage layout
         run: bundle exec ruby _tests/home_layout_test.rb
       - name: Test recursive menu rendering
@@ -70,7 +71,8 @@ jobs:
         run: gem build *.gemspec
 
   publish:
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: check
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     name: Build + Publish
     runs-on: ubuntu-latest
     permissions:
