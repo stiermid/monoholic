@@ -24,6 +24,10 @@ jobs:
           bundler-cache: true
       - name: Test homepage layout
         run: bundle exec ruby _tests/home_layout_test.rb
+      - name: Test recursive menu rendering
+        run: |
+          bundle exec ruby _tests/menu_layout_test.rb
+          JEKYLL_SAFE=1 bundle exec ruby _tests/menu_layout_test.rb
       - name: Set up Node
         uses: actions/setup-node@v4
         with:

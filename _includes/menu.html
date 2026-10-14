@@ -1,21 +1,25 @@
-{%- assign _level = include.level | default: 2 | plus: 0 -%}
-{%- if _level < 2 -%}
-  {%- assign _level = 2 -%}
-{%- elsif _level > 6 -%}
-  {%- assign _level = 6 -%}
-{%- endif -%}
-{%- assign _next_level = _level | plus: 1 -%}
-{%- if _next_level > 6 -%}
-  {%- assign _next_level = 6 -%}
-{%- endif -%}
 {%- for item in include.collection -%}
+  {%- comment -%}
+    Liquid assigns are shared across recursive includes. Recompute each entry
+    from the scoped include parameters before rendering its heading or children.
+  {%- endcomment -%}
+  {%- assign _level = include.level | default: 2 | plus: 0 -%}
+  {%- if _level < 2 -%}
+    {%- assign _level = 2 -%}
+  {%- elsif _level > 6 -%}
+    {%- assign _level = 6 -%}
+  {%- endif -%}
   {%- assign _title_stripped = item.title | strip -%}
   {%- assign _has_title = true -%}
-  {%- if item.title == nil or _title_stripped == empty -%}
+  {%- if item.title == null or _title_stripped == empty -%}
     {%- assign _has_title = false -%}
   {%- endif -%}
+  {%- assign _next_level = _level -%}
+  {%- if _has_title and _level < 6 -%}
+    {%- assign _next_level = _level | plus: 1 -%}
+  {%- endif -%}
   {%- assign _title_slug = item.title | slugify -%}
-  {%- if _title_slug == empty or _title_slug == nil -%}
+  {%- if _title_slug == empty or _title_slug == null -%}
     {%- assign _title_slug = 'section' -%}
   {%- endif -%}
   {%- if include.parent_id -%}
@@ -38,32 +42,34 @@
       | append: forloop.index
     -%}
   {%- endif -%}
-  {%- if _has_title -%}
-    <section aria-labelledby="{{ _heading_id }}">
+  <section
+    {% if _has_title %}
+      aria-labelledby="{{ _heading_id | escape }}"
+    {% endif %}
+  >
+    {%- if _has_title -%}
       {%- if _level == 3 -%}
-        <h3 class="section-title" id="{{ _heading_id }}">
+        <h3 class="section-title" id="{{ _heading_id | escape }}">
           {{ item.title | escape }}
         </h3>
       {%- elsif _level == 4 -%}
-        <h4 class="section-title" id="{{ _heading_id }}">
+        <h4 class="section-title" id="{{ _heading_id | escape }}">
           {{ item.title | escape }}
         </h4>
       {%- elsif _level == 5 -%}
-        <h5 class="section-title" id="{{ _heading_id }}">
+        <h5 class="section-title" id="{{ _heading_id | escape }}">
           {{ item.title | escape }}
         </h5>
       {%- elsif _level >= 6 -%}
-        <h6 class="section-title" id="{{ _heading_id }}">
+        <h6 class="section-title" id="{{ _heading_id | escape }}">
           {{ item.title | escape }}
         </h6>
       {%- else -%}
-        <h2 class="section-title" id="{{ _heading_id }}">
+        <h2 class="section-title" id="{{ _heading_id | escape }}">
           {{ item.title | escape }}
         </h2>
       {%- endif -%}
-  {%- else -%}
-    <section>
-  {%- endif -%}
+    {%- endif -%}
     {%- if item.content_file -%}
       {%- assign _menu_page = site.pages
         | where: 'path', item.content_file
@@ -77,7 +83,8 @@
     {%- endif -%}
     {%- if item.post_list -%}{%- include post_list.html -%}{%- endif -%}
     {%- if item.entries -%}
-      {%- include menu.html
+      {%-
+        include menu.html
         collection=item.entries
         level=_next_level
         parent_id=_heading_id

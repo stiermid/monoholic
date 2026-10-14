@@ -1,0 +1,9 @@
+---
+layout: home
+---
+<nav aria-label="Primary nested menu">
+  {% include menu.html collection=site.data.nested_menu.entries level=2 id_prefix='primary' %}
+</nav>
+<nav aria-label="Secondary nested menu">
+  {% include menu.html collection=site.data.nested_menu.entries level=2 id_prefix='secondary' %}
+</nav>

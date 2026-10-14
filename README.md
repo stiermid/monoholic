@@ -136,6 +136,15 @@ entries:
 
 Nesting can go as deep as needed — `menu.html` includes itself recursively for each `entries` array it encounters.
 
+Top-level titles use `h2`. Each titled parent advances its children by one heading level, capped at `h6`. Entries with missing, empty, or whitespace-only titles are unlabelled groups: they render no heading and do not advance the heading level. Later siblings always retain their own level, regardless of the depth of earlier branches.
+
+Each titled section is labelled by its heading. Heading IDs include the ancestor path and sibling index, so repeated titles remain distinct. When including multiple copies of a menu on the same page, give each copy a distinct `id_prefix` to avoid overlapping IDs:
+
+```liquid
+{% include menu.html collection=site.data.menu.entries level=2 id_prefix='primary' %}
+{% include menu.html collection=site.data.menu.entries level=2 id_prefix='secondary' %}
+```
+
 #### Using External Content Files
 
 You can reference external markdown files instead of inline content:
@@ -215,10 +224,14 @@ bundle install
 npm ci
 npx playwright install --with-deps chromium firefox webkit
 bundle exec ruby _tests/home_layout_test.rb
+bundle exec ruby _tests/menu_layout_test.rb
+JEKYLL_SAFE=1 bundle exec ruby _tests/menu_layout_test.rb
 npm run test:browser
 ```
 
 Browser tests build and serve an isolated fixture site. They cover Chromium, Firefox, and WebKit at 320px, 375px, 768px, and 1280px, including long text, plain and highlighted code, Markdown and HTML tables, keyboard scrolling, resizing, and JavaScript-disabled layouts. External fonts are blocked so the tests do not depend on Google Fonts being available.
+
+Menu rendering checks cover branching recursion, deep nesting, untitled groups, repeated titles, unique IDs, escaped labels, and independent menu instances in normal and Jekyll safe mode. Browser tests also verify native heading and section semantics with JavaScript disabled.
 
 To run one browser, use `npm run test:browser -- --project=chromium`. You can also set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to use a locally installed Chromium binary. Generated sites, screenshots, and traces are ignored by Git; CI retains failure diagnostics for seven days.
 
