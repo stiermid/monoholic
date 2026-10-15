@@ -63,7 +63,9 @@ test("recursive menus keep sibling levels and independent IDs", async ({
     .evaluateAll((elements) => elements.map((element) => element.id));
   expect(new Set(ids).size).toBe(ids.length);
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
-  const homeMenu = page.getByRole("navigation", { name: "Site sections" });
+  const homeMenu = page.getByRole("navigation", {
+    name: "Site sections & links",
+  });
   await expect(homeMenu.getByRole("heading", { level: 2 })).toHaveCount(2);
 });
 

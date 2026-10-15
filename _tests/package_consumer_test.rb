@@ -32,6 +32,11 @@ def build_consumer(gem_home, version, output_root)
       "ignore_theme_config" => true,
       "disable_disk_cache" => true,
       "title" => "Packaged theme",
+      "lang" => "en-GB",
+      "theme_config" => {
+        "skip_link_label" => "Skip to main content",
+        "site_sections_label" => "Sections & links"
+      },
       "url" => "https://example.test",
       "baseurl" => baseurl,
       "future" => true,
@@ -46,6 +51,15 @@ def build_consumer(gem_home, version, output_root)
     home = File.read(File.join(destination, "index.html"))
     page = File.read(File.join(destination, "about.html"))
     post = File.read(File.join(destination, "2026/01/01/example.html"))
+    [home, post].each do |output|
+      assert_package(output.include?('<html lang="en-GB">'), "Site language was not inherited")
+    end
+    assert_package(page.include?('<html lang="en-US">'), "Page language override was ignored")
+    assert_package(home.include?("Skip to main content"), "Configured skip-link label missing")
+    assert_package(
+      home.include?('aria-label="Sections &amp; links"'),
+      "Configured navigation label missing or not escaped"
+    )
     assert_package(home.include?("<strong>home</strong>"), "Homepage content lost")
     assert_package(page.include?("Page content."), "Page layout failed")
     assert_package(post.include?("Post content."), "Post layout failed")
@@ -140,7 +154,7 @@ Dir.mktmpdir("monoholic-consumer-") do |root|
     File.join(source, "index.md"), "---\nlayout: home\n---\nWelcome **home**.\n"
   )
   File.write(
-    File.join(source, "about.md"), "---\nlayout: page\n---\nPage content.\n"
+    File.join(source, "about.md"), "---\nlayout: page\nlang: en-US\n---\nPage content.\n"
   )
   File.write(
     File.join(source, "_data", "menu.yml"),

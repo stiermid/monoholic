@@ -32,6 +32,10 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
       - name: Test homepage layout
         run: bundle exec ruby _tests/home_layout_test.rb
+      - name: Test language inheritance and translated labels
+        run: |
+          bundle exec ruby _tests/localization_test.rb
+          JEKYLL_SAFE=1 bundle exec ruby _tests/localization_test.rb
       - name: Test recursive menu rendering
         run: |
           bundle exec ruby _tests/menu_layout_test.rb

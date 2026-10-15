@@ -80,7 +80,34 @@ theme_config:
   date_format: "%Y-%m-%d" # Date format for post metadata
   monochrome_images: true # Apply grayscale filter to images (default: true)
   footer: true # Show/hide site footer (default: true)
+  skip_link_label: "Skip to content" # Keyboard skip-link text
+  site_sections_label: "Site sections" # Accessible name of the homepage navigation
 ```
+
+### Language and Interface Labels
+
+The document's `<html lang>` uses the page's `lang` front matter, then the site's `lang` setting, then `en`. Use BCP 47 language tags such as `de`, `en-GB`, or `zh-Hant-TW`. Surrounding whitespace is trimmed; missing, empty, whitespace-only, or `false` values fall back to the next setting.
+
+For example, configure a German site in `_config.yml`:
+
+```yaml
+lang: de
+theme_config:
+  skip_link_label: "Zum Inhalt"
+  site_sections_label: "Seitenbereiche"
+  back: "Zurück"
+```
+
+Override the document language for an individual page or post in its front matter:
+
+```yaml
+---
+layout: page
+lang: fr-CA
+---
+```
+
+Declaring `lang` helps browsers and assistive technology interpret your content; it does not translate the content or interface automatically. Interface labels above are site-wide and rendered as plain text, not HTML. Missing or blank labels retain their English defaults so the skip link and navigation keep accessible names. Existing scroll labels and hints can also be translated under [Responsive Content](#responsive-content).
 
 ### Fediverse Creator tag
 
@@ -261,6 +288,8 @@ npx playwright install --with-deps chromium firefox webkit
 bundle exec ruby _tests/release_workflow_test.rb
 bundle exec ruby _tests/release_tag_test.rb
 bundle exec ruby _tests/home_layout_test.rb
+bundle exec ruby _tests/localization_test.rb
+JEKYLL_SAFE=1 bundle exec ruby _tests/localization_test.rb
 bundle exec ruby _tests/menu_layout_test.rb
 JEKYLL_SAFE=1 bundle exec ruby _tests/menu_layout_test.rb
 bundle exec ruby _tests/menu_content_test.rb
@@ -273,6 +302,8 @@ Browser tests build and serve an isolated fixture site. They cover Chromium, Fir
 Menu rendering checks cover branching recursion, deep nesting, untitled groups, repeated titles, unique IDs, escaped labels, and independent menu instances in normal and Jekyll safe mode. Browser tests also verify native heading and section semantics with JavaScript disabled.
 
 Menu content checks build root and `/blog` sites in normal and safe mode. They cover Liquid-before-Markdown rendering, nested includes and host pages, recursive sections, literal Liquid examples, legacy content sources, and invalid include paths.
+
+Localization checks cover language inheritance across all four layouts, page overrides, blank-value fallbacks, escaped attributes, translated labels, and unchanged skip-link destinations in normal and safe mode.
 
 To run one browser, use `npm run test:browser -- --project=chromium`. You can also set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to use a locally installed Chromium binary. Generated sites, screenshots, and traces are ignored by Git; CI retains failure diagnostics for seven days.
 
