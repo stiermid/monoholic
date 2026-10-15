@@ -217,8 +217,6 @@ Each entry is a filename (without `.js`) relative to `assets/js/`. The example a
 
 ## Contributing
 
-Release notes are available in [CHANGELOG.md](CHANGELOG.md).
-
 ### Running Tests
 
 ```sh
