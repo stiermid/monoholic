@@ -9,6 +9,23 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/nested-menu.html");
 });
 
+test("included Markdown renders Liquid into a usable link without JavaScript", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const about = page.getByRole("region", { name: /about$/ });
+  await expect(about.locator("p").first()).toHaveText(
+    "A minimal theme for writers and developers.",
+  );
+  const link = about.getByRole("link", { name: "Explore Monoholic examples" });
+  await expect(link).toHaveAttribute("href", "/content.html");
+  await expect(link.locator("strong")).toHaveText("Monoholic");
+  await expect(about.getByRole("table")).toHaveCount(0);
+  await link.click();
+  await expect(page).toHaveURL(/\/content\.html$/);
+  await expect(page.locator("main pre")).toHaveCount(2);
+});
+
 test("recursive menus keep sibling levels and independent IDs", async ({
   page,
 }) => {

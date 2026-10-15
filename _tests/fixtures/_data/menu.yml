@@ -1,5 +1,5 @@
 entries:
   - title: about
-    content: "<p>A minimal theme for writers and developers.</p>"
+    content_include: fragments/intro.md
   - title: all posts
     post_list: true

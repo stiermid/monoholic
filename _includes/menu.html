@@ -70,7 +70,12 @@
         </h2>
       {%- endif -%}
     {%- endif -%}
-    {%- if item.content_file -%}
+    {%- if item.content_include -%}
+      {%- capture _menu_content -%}
+        {%- include {{ item.content_include }} -%}
+      {%- endcapture -%}
+      {{ _menu_content | markdownify }}
+    {%- elsif item.content_file -%}
       {%- assign _menu_page = site.pages
         | where: 'path', item.content_file
         | first
