@@ -116,8 +116,11 @@ entries:
 
 - `title`: The section header.
 - `content`: Custom HTML or text for the menu section.
-- `content_file`: Path to an external markdown file (e.g., `about.md`) to load content from your root directory.
+- `content_include`: Path relative to `_includes/` for a Markdown fragment with Liquid support (recommended for reusable content).
+- `content_file`: Path to an existing Jekyll page (e.g., `about.md`) relative to your site root. Retained for compatibility; does not reliably evaluate Liquid.
 - `post_list`: Set to `true` to auto-generate a list of your Jekyll posts under this section.
+
+Use one content source per entry. If several are supplied, precedence is `content_include`, then `content_file`, then `content`.
 
 #### Nested Menu Sections
 
@@ -147,7 +150,29 @@ Each titled section is labelled by its heading. Heading IDs include the ancestor
 
 #### Using External Content Files
 
-You can reference external markdown files instead of inline content:
+For reusable content containing Liquid, create a Markdown fragment in your site's `_includes/` directory, for example `_includes/fragments/about.md`:
+
+```liquid
+Welcome to **{{ site.title }}**.
+
+[Home]({{ '/' | relative_url }})
+```
+
+Reference it using `content_include`:
+
+```yaml
+entries:
+  - title: about
+    content_include: fragments/about.md
+```
+
+Jekyll renders Liquid first, then Monoholic converts the resulting Markdown to HTML once. Standard Liquid variables, filters, tags, and nested includes work without a custom plugin, including in safe mode. `page` refers to the page displaying the menu, not the fragment. Use `relative_url` for links that must work on project sites such as `/blog`.
+
+Fragments must **not** have YAML front matter. They do not generate standalone pages. Paths are relative to `_includes/`, even when the menu appears on a nested page; missing files and invalid paths fail the build with Jekyll's include error rather than silently omitting content. Only include trusted, author-controlled files.
+
+##### Existing `content_file` references
+
+Existing page references remain supported:
 
 ```yaml
 entries:
@@ -155,7 +180,17 @@ entries:
     content_file: about.md
 ```
 
-This will load and render the content from `about.md` in your site's root directory.
+The referenced file must be a Jekyll page with YAML front matter (an empty `---` block is sufficient) and must not be excluded from the build. Its Markdown content is embedded without its layout; the page can also generate its own standalone URL. Missing page references are silently omitted, preserving existing behavior.
+
+`content_file` does not run a separate Liquid rendering pass. Results for Liquid expressions can depend on page rendering order, so use `content_include` whenever the content contains Liquid.
+
+To migrate, move reusable content from `about.md` to `_includes/fragments/about.md`, remove its YAML front matter, and replace `content_file: about.md` with `content_include: fragments/about.md`. If you still need a standalone About page, keep `about.md` with its front matter and include the fragment in its body:
+
+```liquid
+{% include fragments/about.md %}
+```
+
+Use a Markdown page for this wrapper so Jekyll converts the included Markdown normally. Remove an old standalone page only if you no longer need its URL.
 
 ### Favicon
 
@@ -228,12 +263,16 @@ bundle exec ruby _tests/release_tag_test.rb
 bundle exec ruby _tests/home_layout_test.rb
 bundle exec ruby _tests/menu_layout_test.rb
 JEKYLL_SAFE=1 bundle exec ruby _tests/menu_layout_test.rb
+bundle exec ruby _tests/menu_content_test.rb
+JEKYLL_SAFE=1 bundle exec ruby _tests/menu_content_test.rb
 npm run test:browser
 ```
 
 Browser tests build and serve an isolated fixture site. They cover Chromium, Firefox, and WebKit at 320px, 375px, 768px, and 1280px, including long text, plain and highlighted code, Markdown and HTML tables, keyboard scrolling, resizing, and JavaScript-disabled layouts. External fonts are blocked so the tests do not depend on Google Fonts being available.
 
 Menu rendering checks cover branching recursion, deep nesting, untitled groups, repeated titles, unique IDs, escaped labels, and independent menu instances in normal and Jekyll safe mode. Browser tests also verify native heading and section semantics with JavaScript disabled.
+
+Menu content checks build root and `/blog` sites in normal and safe mode. They cover Liquid-before-Markdown rendering, nested includes and host pages, recursive sections, literal Liquid examples, legacy content sources, and invalid include paths.
 
 To run one browser, use `npm run test:browser -- --project=chromium`. You can also set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to use a locally installed Chromium binary. Generated sites, screenshots, and traces are ignored by Git; CI retains failure diagnostics for seven days.
 

@@ -52,6 +52,14 @@ def build_consumer(gem_home, version, output_root)
     assert_package(home.include?('class="site-header"'), "Default layout failed")
     assert_package(home.include?('class="post-list"'), "Post list missing")
     assert_package(
+      home.include?("<strong>Packaged theme</strong>"),
+      "Menu include did not render Liquid before Markdown"
+    )
+    assert_package(
+      home.include?("href=\"#{baseurl}/about.html\""),
+      "Menu include link does not honor baseurl"
+    )
+    assert_package(
       home.include?("href=\"#{baseurl}/2026/01/01/example.html\""),
       "Post link does not honor baseurl"
     )
@@ -115,7 +123,8 @@ Dir.mktmpdir("monoholic-consumer-") do |root|
   gem_home = File.join(root, "gems")
   source = File.join(root, "site")
   FileUtils.mkdir_p([
-    gem_home, File.join(source, "_data"), File.join(source, "_posts")
+    gem_home, File.join(source, "_data"), File.join(source, "_posts"),
+    File.join(source, "_includes", "fragments")
   ])
   Gem::Installer.at(
     artifact, install_dir: gem_home, ignore_dependencies: true,
@@ -135,7 +144,11 @@ Dir.mktmpdir("monoholic-consumer-") do |root|
   )
   File.write(
     File.join(source, "_data", "menu.yml"),
-    "entries:\n  - title: Archive\n    post_list: true\n"
+    "entries:\n  - title: About\n    content_include: fragments/intro.md\n  - title: Archive\n    post_list: true\n"
+  )
+  File.write(
+    File.join(source, "_includes", "fragments", "intro.md"),
+    "**{{ site.title }}**. [About]({{ '/about.html' | relative_url }})\n"
   )
   File.write(
     File.join(source, "_posts", "2026-01-01-example.md"),
