@@ -1,8 +1,12 @@
 title: Monoholic
+lang: en-GB
 url: "http://127.0.0.1:4173"
 baseurl: ""
 theme: monoholic
 ignore_theme_config: true
+theme_config:
+  skip_link_label: "Skip to main content"
+  site_sections_label: "Site sections & links"
 markdown: kramdown
 kramdown:
   input: GFM

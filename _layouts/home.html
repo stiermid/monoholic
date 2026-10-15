@@ -3,6 +3,10 @@ layout: default
 ---
 {{ content }}
 
-<nav aria-label="Site sections">
+{%- assign _site_sections_label = site.theme_config.site_sections_label
+  | default: ''
+  | strip
+-%}
+<nav aria-label="{{ _site_sections_label | default: 'Site sections' | escape }}">
   {%- include menu.html collection=site.data.menu.entries level=2 -%}
 </nav>
