@@ -309,11 +309,33 @@ To run one browser, use `npm run test:browser -- --project=chromium`. You can al
 
 ### Release Validation
 
-Both pull requests and release-tag pushes run the build and test checks. Publishing depends on all checks succeeding and is restricted to pushed `v*` tags; pull requests never publish. The tag must be `v` followed by the exact gem version in `monoholic.gemspec`, including any RubyGems prerelease suffix. Update the version metadata and lockfiles together before tagging.
+Both pull requests and release-tag pushes run the build and test checks on
+Ruby 3.3 and 3.4. Publishing depends on both Ruby jobs succeeding and is
+restricted to pushed `v*` tags; pull requests never publish. The tag must be
+`v` followed by the exact gem version in `monoholic.gemspec`, including any
+RubyGems prerelease suffix. Update the version metadata and lockfiles
+together before tagging.
 
-CI builds the gem once and installs it into a temporary gem home. A clean consumer site uses that installed package with the existing lockfile dependencies, without downloading gems or falling back to repository theme files. The checks build root and `/blog` sites and verify layouts, compiled CSS, scripts, favicons, feeds, and URLs. Negative tests reject broken packages and invalid versions.
+Each Ruby job builds the gem once and installs it into a temporary gem home.
+A clean consumer site's Gemfile declares only `monoholic`; Bundler resolves
+its runtime dependencies from installed gems without downloading gems or
+falling back to repository theme files. The checks run
+`bundle exec jekyll build` for root and `/blog` sites and verify layouts,
+compiled CSS, scripts, favicons, feeds, and URLs. Negative tests reject broken
+packages and invalid versions. ERB must be declared as a runtime dependency,
+even on hosts that provide it as a default gem; this is checked on both Rubies.
 
-After validation, tag runs upload the gem and its SHA-256 manifest as a seven-day artifact. The publishing job downloads those same bytes, verifies the checksum and package name/version, and pushes the same gem to GitHub Packages and RubyGems—without checking out or rebuilding the source. Rerunning validation replaces the artifact only after checks succeed; if it has expired, rerun validation rather than just the publishing job.
+Consumer builds use resolved Ruby and gem executable paths, with no Jekyll
+wrapper available on `PATH`. This also covers vendored CI installations
+without relying on globally installed gem executables.
+
+After validation, the Ruby 3.3 tag job uploads its gem and SHA-256 manifest
+as a seven-day artifact; the Ruby 3.4 job does not upload a competing release
+artifact. After both jobs succeed, the publishing job downloads those same
+bytes, verifies the checksum and package name/version, and pushes the same
+gem to GitHub Packages and RubyGems—without checking out or rebuilding the
+source. Rerunning validation replaces the artifact only after checks succeed;
+if it has expired, rerun validation rather than just the publishing job.
 
 Publishing keeps the existing authentication: `GITHUB_TOKEN` with package-write permission for GitHub Packages, and the repository's `RUBYGEMS_API_KEY` secret for RubyGems. Validation has read-only repository permissions; registry credentials are used only by publishing steps.
 

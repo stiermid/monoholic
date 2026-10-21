@@ -18,6 +18,19 @@ cases = {
   ],
   "unexpected name" => [
     ->(spec) { spec.name = "not-monoholic" }, "Unexpected gem name"
+  ],
+  "missing ERB runtime dependency" => [
+    ->(spec) do
+      spec.dependencies.delete_if { |dependency| dependency.name == "erb" }
+    end,
+    "Package must declare ERB as a runtime dependency"
+  ],
+  "development-only ERB dependency" => [
+    ->(spec) do
+      spec.dependencies.delete_if { |dependency| dependency.name == "erb" }
+      spec.add_development_dependency "erb", ">= 2.2", "< 7.0"
+    end,
+    "Package must declare ERB as a runtime dependency"
   ]
 }
 
@@ -37,4 +50,4 @@ cases.each do |name, (mutate, expected_error)|
   end
 end
 
-puts "Invalid package checks passed (missing stylesheet, wrong version, wrong name)."
+puts "Invalid package checks passed (#{cases.keys.join(', ')})."
