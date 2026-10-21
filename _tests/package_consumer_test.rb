@@ -131,6 +131,12 @@ assert_package(package_spec.name == "monoholic", "Unexpected gem name")
 assert_package(
   package_spec.version == source_spec.version, "Package version differs from source"
 )
+has_erb_dependency = package_spec.runtime_dependencies.any? do |dependency|
+  dependency.name == "erb"
+end
+assert_package(
+  has_erb_dependency, "Package must declare ERB as a runtime dependency"
+)
 
 # Use the development bundle only to locate installed gems. Adding its
 # dependencies to the consumer Gemfile would hide missing runtime dependencies.

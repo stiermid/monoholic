@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.files         = `git ls-files -z`.split("\x0").select { |f| f.match(%r!^(assets|_data|_layouts|_includes|_sass|LICENSE|README|robots\.txt)!i) }
 
-  # Jekyll's CLI requires ERB, which is no longer a default gem in Ruby 3.4.
+  # Jekyll's CLI requires ERB even when Ruby packages it separately.
   spec.add_runtime_dependency "erb", ">= 2.2", "< 7.0"
   spec.add_runtime_dependency "jekyll", "~> 4.4"
   spec.add_runtime_dependency "jekyll-sass-converter", "~> 3.0"

@@ -322,8 +322,8 @@ its runtime dependencies from installed gems without downloading gems or
 falling back to repository theme files. The checks run
 `bundle exec jekyll build` for root and `/blog` sites and verify layouts,
 compiled CSS, scripts, favicons, feeds, and URLs. Negative tests reject broken
-packages and invalid versions, including packages missing the ERB runtime
-dependency on Ruby 3.4 and newer.
+packages and invalid versions. ERB must be declared as a runtime dependency,
+even on hosts that provide it as a default gem; this is checked on both Rubies.
 
 Consumer builds use resolved Ruby and gem executable paths, with no Jekyll
 wrapper available on `PATH`. This also covers vendored CI installations

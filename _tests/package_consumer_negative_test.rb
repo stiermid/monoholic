@@ -18,17 +18,21 @@ cases = {
   ],
   "unexpected name" => [
     ->(spec) { spec.name = "not-monoholic" }, "Unexpected gem name"
-  ]
-}
-
-if Gem.ruby_version >= Gem::Version.new("3.4")
-  cases["missing ERB runtime dependency"] = [
+  ],
+  "missing ERB runtime dependency" => [
     ->(spec) do
       spec.dependencies.delete_if { |dependency| dependency.name == "erb" }
     end,
-    "cannot load such file -- erb"
+    "Package must declare ERB as a runtime dependency"
+  ],
+  "development-only ERB dependency" => [
+    ->(spec) do
+      spec.dependencies.delete_if { |dependency| dependency.name == "erb" }
+      spec.add_development_dependency "erb", ">= 2.2", "< 7.0"
+    end,
+    "Package must declare ERB as a runtime dependency"
   ]
-end
+}
 
 cases.each do |name, (mutate, expected_error)|
   Dir.mktmpdir("monoholic-broken-package-") do |root|

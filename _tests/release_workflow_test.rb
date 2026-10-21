@@ -21,7 +21,7 @@ publish = jobs.fetch("publish")
 assert_equal(nil, check["if"], "validation must run for PRs and release tags")
 assert_equal(
   ["3.3", "3.4"], check.fetch("strategy").fetch("matrix").fetch("ruby"),
-  "validate consumers before and after ERB stopped being a default gem"
+  "validate clean consumers on both CI Ruby versions"
 )
 assert_equal(
   false, check.fetch("strategy").fetch("fail-fast"), "complete both Ruby checks"
