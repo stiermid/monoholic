@@ -100,7 +100,9 @@ jobs:
       - name: Test package integrity verification
         run: bundle exec ruby _tests/package_integrity_test.rb _tests/.release/monoholic.gem _tests/.release/monoholic.gem.sha256
       - name: Upload validated release package
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && matrix.ruby == '3.3'
+        if: >-
+          github.event_name == 'push' &&
+          startsWith(github.ref, 'refs/tags/v') && matrix.ruby == '3.3'
         uses: actions/upload-artifact@v4
         with:
           name: validated-gem

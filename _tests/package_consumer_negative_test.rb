@@ -23,7 +23,9 @@ cases = {
 
 if Gem.ruby_version >= Gem::Version.new("3.4")
   cases["missing ERB runtime dependency"] = [
-    ->(spec) { spec.dependencies.delete_if { |dependency| dependency.name == "erb" } },
+    ->(spec) do
+      spec.dependencies.delete_if { |dependency| dependency.name == "erb" }
+    end,
     "cannot load such file -- erb"
   ]
 end

@@ -23,8 +23,12 @@ assert_equal(
   ["3.3", "3.4"], check.fetch("strategy").fetch("matrix").fetch("ruby"),
   "validate consumers before and after ERB stopped being a default gem"
 )
-assert_equal(false, check.fetch("strategy").fetch("fail-fast"), "complete both Ruby checks")
-assert_equal(nil, check["continue-on-error"], "Ruby failures must block publishing")
+assert_equal(
+  false, check.fetch("strategy").fetch("fail-fast"), "complete both Ruby checks"
+)
+assert_equal(
+  nil, check["continue-on-error"], "Ruby failures must block publishing"
+)
 assert_equal({ "contents" => "read" }, check.fetch("permissions"), "validation permissions")
 assert_equal(["check"], Array(publish["needs"]), "publishing must depend on validation")
 assert_equal(
@@ -51,16 +55,21 @@ assert_equal(
   tag_step.fetch("run"), "quote the release tag argument"
 )
 %w[package_consumer_test.rb package_consumer_negative_test.rb].each do |test|
-  consumer_step = steps.find { |step| step["run"].to_s.include?("_tests/#{test}") }
+  consumer_step = steps.find do |step|
+    step["run"].to_s.include?("_tests/#{test}")
+  end
   raise "Missing #{test} validation" unless consumer_step
   assert_equal(nil, consumer_step["if"], "#{test} must run on both Rubies")
 end
 
-diagnostics = steps.find { |step| step["name"] == "Upload browser failure diagnostics" }
+diagnostics = steps.find do |step|
+  step["name"] == "Upload browser failure diagnostics"
+end
 raise "Missing browser failure diagnostics" unless diagnostics
 assert_equal(
   "browser-failure-diagnostics-ruby-${{ matrix.ruby }}",
-  diagnostics.fetch("with").fetch("name"), "keep matrix failure artifacts distinct"
+  diagnostics.fetch("with").fetch("name"),
+  "keep matrix failure artifacts distinct"
 )
 
 upload = steps.find do |step|
@@ -122,4 +131,5 @@ pushes.each do |step|
   end
 end
 
-puts "Release workflow guards passed (Ruby matrix, gating, validation, artifact handoff, integrity)."
+puts "Release workflow guards passed " \
+     "(Ruby matrix, gating, validation, artifact handoff, integrity)."

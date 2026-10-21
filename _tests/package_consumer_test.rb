@@ -46,7 +46,9 @@ def build_consumer(gem_home, version, output_root)
       RbConfig.ruby, Gem.bin_path("bundler", "bundle", Bundler::VERSION),
       "exec", "jekyll", "build", "--config", config_path
     )
-    assert_package(status.success?, "Packaged consumer CLI build failed:\n#{output}")
+    assert_package(
+      status.success?, "Packaged consumer CLI build failed:\n#{output}"
+    )
 
     home = File.read(File.join(destination, "index.html"))
     page = File.read(File.join(destination, "about.html"))
@@ -125,8 +127,8 @@ assert_package(
   package_spec.version == source_spec.version, "Package version differs from source"
 )
 
-# The development bundle only locates installed gems. Do not add its dependencies
-# to the consumer Gemfile: that would hide missing package runtime dependencies.
+# Use the development bundle only to locate installed gems. Adding its
+# dependencies to the consumer Gemfile would hide missing runtime dependencies.
 dependencies = Bundler.load.specs.reject do |spec|
   %w[monoholic bundler].include?(spec.name)
 end
@@ -147,7 +149,8 @@ Dir.mktmpdir("monoholic-consumer-") do |root|
 
   File.write(
     File.join(source, "Gemfile"),
-    "source 'https://rubygems.org'\ngem 'monoholic', '= #{package_spec.version}'\n"
+    "source 'https://rubygems.org'\n" \
+    "gem 'monoholic', '= #{package_spec.version}'\n"
   )
   File.write(
     File.join(source, "index.md"), "---\nlayout: home\n---\nWelcome **home**.\n"
