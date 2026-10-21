@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     monoholic (1.3.0)
+      erb (>= 2.2, < 7.0)
       jekyll (~> 4.4)
       jekyll-feed (~> 0.12)
       jekyll-sass-converter (~> 3.0)
@@ -174,7 +175,6 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  erb (~> 6.0)
   monoholic!
 
 CHECKSUMS

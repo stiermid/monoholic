@@ -7,14 +7,13 @@ require "rbconfig"
 require "rubygems/installer"
 require "rubygems/package"
 require "tmpdir"
+require "yaml"
 
 def assert_package(condition, message)
   raise message unless condition
 end
 
 def build_consumer(gem_home, version, output_root)
-  require "jekyll"
-
   spec = Gem::Specification.find_by_name("monoholic", "= #{version}")
   installed_root = File.realpath(spec.full_gem_path)
   assert_package(
@@ -24,8 +23,8 @@ def build_consumer(gem_home, version, output_root)
 
   ["", "/blog"].each_with_index do |baseurl, index|
     destination = File.join(output_root, "output-#{index}")
-    config = Jekyll.configuration(
-      "config" => [],
+    config_path = File.join(output_root, "config-#{index}.yml")
+    config = {
       "source" => Dir.pwd,
       "destination" => destination,
       "theme" => "monoholic",
@@ -41,12 +40,13 @@ def build_consumer(gem_home, version, output_root)
       "baseurl" => baseurl,
       "future" => true,
       "quiet" => true
+    }
+    File.write(config_path, YAML.dump(config))
+    output, status = Open3.capture2e(
+      RbConfig.ruby, Gem.bin_path("bundler", "bundle", Bundler::VERSION),
+      "exec", "jekyll", "build", "--config", config_path
     )
-    site = Jekyll::Site.new(config)
-    assert_package(
-      File.realpath(site.theme.root) == installed_root, "Incorrect theme root"
-    )
-    site.process
+    assert_package(status.success?, "Packaged consumer CLI build failed:\n#{output}")
 
     home = File.read(File.join(destination, "index.html"))
     page = File.read(File.join(destination, "about.html"))
@@ -105,7 +105,7 @@ def build_consumer(gem_home, version, output_root)
       "Feed post URL does not honor baseurl"
     )
   end
-  puts "Packaged consumer builds passed (root site and /blog project site)."
+  puts "Packaged consumer CLI builds passed (root site and /blog project site)."
 end
 
 if ARGV.first == "--consumer"
@@ -125,8 +125,8 @@ assert_package(
   package_spec.version == source_spec.version, "Package version differs from source"
 )
 
-# Resolve using the already-installed lockfile dependencies, without fetching
-# gems or using the repository's PATH source for the theme under test.
+# The development bundle only locates installed gems. Do not add its dependencies
+# to the consumer Gemfile: that would hide missing package runtime dependencies.
 dependencies = Bundler.load.specs.reject do |spec|
   %w[monoholic bundler].include?(spec.name)
 end
@@ -145,11 +145,10 @@ Dir.mktmpdir("monoholic-consumer-") do |root|
     wrappers: false, document: []
   ).install
 
-  gemfile = [
-    "source 'https://rubygems.org'", "gem 'monoholic', '= #{package_spec.version}'"
-  ]
-  dependencies.each { |spec| gemfile << "gem '#{spec.name}', '= #{spec.version}'" }
-  File.write(File.join(source, "Gemfile"), "#{gemfile.join("\n")}\n")
+  File.write(
+    File.join(source, "Gemfile"),
+    "source 'https://rubygems.org'\ngem 'monoholic', '= #{package_spec.version}'\n"
+  )
   File.write(
     File.join(source, "index.md"), "---\nlayout: home\n---\nWelcome **home**.\n"
   )

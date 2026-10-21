@@ -21,6 +21,13 @@ cases = {
   ]
 }
 
+if Gem.ruby_version >= Gem::Version.new("3.4")
+  cases["missing ERB runtime dependency"] = [
+    ->(spec) { spec.dependencies.delete_if { |dependency| dependency.name == "erb" } },
+    "cannot load such file -- erb"
+  ]
+end
+
 cases.each do |name, (mutate, expected_error)|
   Dir.mktmpdir("monoholic-broken-package-") do |root|
     package = Gem::Package.new(artifact)
@@ -37,4 +44,4 @@ cases.each do |name, (mutate, expected_error)|
   end
 end
 
-puts "Invalid package checks passed (missing stylesheet, wrong version, wrong name)."
+puts "Invalid package checks passed (#{cases.keys.join(', ')})."
