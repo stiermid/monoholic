@@ -17,6 +17,7 @@ assert_equal(["master"], events.fetch("pull_request").fetch("branches"), "PR tri
 
 jobs = workflow.fetch("jobs")
 check = jobs.fetch("check")
+pages = jobs.fetch("pages")
 publish = jobs.fetch("publish")
 assert_equal(nil, check["if"], "validation must run for PRs and release tags")
 assert_equal(
@@ -30,11 +31,40 @@ assert_equal(
   nil, check["continue-on-error"], "Ruby failures must block publishing"
 )
 assert_equal({ "contents" => "read" }, check.fetch("permissions"), "validation permissions")
-assert_equal(["check"], Array(publish["needs"]), "publishing must depend on validation")
+assert_equal(
+  %w[check pages], Array(publish["needs"]),
+  "publishing must depend on gem and native Pages validation"
+)
 assert_equal(
   "github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')",
   publish.fetch("if"), "publishing must be restricted to tag pushes"
 )
+
+assert_equal(nil, pages["if"], "Pages validation must run on PRs and tags")
+assert_equal(
+  nil, pages["continue-on-error"], "Pages failures must block release"
+)
+assert_equal(
+  { "contents" => "read" }, pages.fetch("permissions"), "Pages permissions"
+)
+assert_equal(
+  { "BUNDLE_GEMFILE" => "${{ github.workspace }}/_tests/pages/Gemfile" },
+  pages.fetch("env"), "native Pages must use its isolated bundle"
+)
+pages_steps = pages.fetch("steps")
+pages_ruby = pages_steps.find { |step| step["uses"] == "ruby/setup-ruby@v1" }
+raise "Missing native Pages Ruby setup" unless pages_ruby
+assert_equal(
+  "3.3", pages_ruby.fetch("with").fetch("ruby-version"), "Pages Ruby"
+)
+assert_equal(
+  true, pages_ruby.fetch("with").fetch("bundler-cache"), "install Pages bundle"
+)
+pages_test = pages_steps.find do |step|
+  step["run"] == "bundle exec ruby _tests/pages/consumer_test.rb"
+end
+raise "Missing native Pages consumer validation" unless pages_test
+assert_equal(nil, pages_test["if"], "native Pages consumer must not be skipped")
 
 steps = check.fetch("steps")
 ruby_setup = steps.find { |step| step["uses"] == "ruby/setup-ruby@v1" }
@@ -132,4 +162,4 @@ pushes.each do |step|
 end
 
 puts "Release workflow guards passed " \
-     "(Ruby matrix, gating, validation, artifact handoff, integrity)."
+     "(Ruby matrix, native Pages, gating, artifact handoff, integrity)."
