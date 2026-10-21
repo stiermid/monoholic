@@ -19,6 +19,12 @@ jobs = workflow.fetch("jobs")
 check = jobs.fetch("check")
 publish = jobs.fetch("publish")
 assert_equal(nil, check["if"], "validation must run for PRs and release tags")
+assert_equal(
+  ["3.3", "3.4"], check.fetch("strategy").fetch("matrix").fetch("ruby"),
+  "validate consumers before and after ERB stopped being a default gem"
+)
+assert_equal(false, check.fetch("strategy").fetch("fail-fast"), "complete both Ruby checks")
+assert_equal(nil, check["continue-on-error"], "Ruby failures must block publishing")
 assert_equal({ "contents" => "read" }, check.fetch("permissions"), "validation permissions")
 assert_equal(["check"], Array(publish["needs"]), "publishing must depend on validation")
 assert_equal(
@@ -27,6 +33,12 @@ assert_equal(
 )
 
 steps = check.fetch("steps")
+ruby_setup = steps.find { |step| step["uses"] == "ruby/setup-ruby@v1" }
+raise "Missing validation Ruby setup" unless ruby_setup
+assert_equal(
+  "${{ matrix.ruby }}", ruby_setup.fetch("with").fetch("ruby-version"),
+  "use the matrix Ruby version"
+)
 tag_step = steps.find { |step| step["run"].to_s.include?("verify_release_tag.rb") }
 raise "Missing release tag validation" unless tag_step
 assert_equal(publish.fetch("if"), tag_step.fetch("if"), "tag validation event guard")
@@ -38,9 +50,18 @@ assert_equal(
   'bundle exec ruby .github/scripts/verify_release_tag.rb "$RELEASE_TAG"',
   tag_step.fetch("run"), "quote the release tag argument"
 )
-raise "Missing package consumer validation" unless steps.any? do |step|
-  step["run"].to_s.include?("_tests/package_consumer_test.rb")
+%w[package_consumer_test.rb package_consumer_negative_test.rb].each do |test|
+  consumer_step = steps.find { |step| step["run"].to_s.include?("_tests/#{test}") }
+  raise "Missing #{test} validation" unless consumer_step
+  assert_equal(nil, consumer_step["if"], "#{test} must run on both Rubies")
 end
+
+diagnostics = steps.find { |step| step["name"] == "Upload browser failure diagnostics" }
+raise "Missing browser failure diagnostics" unless diagnostics
+assert_equal(
+  "browser-failure-diagnostics-ruby-${{ matrix.ruby }}",
+  diagnostics.fetch("with").fetch("name"), "keep matrix failure artifacts distinct"
+)
 
 upload = steps.find do |step|
   step["uses"] == "actions/upload-artifact@v4" &&
@@ -48,7 +69,8 @@ upload = steps.find do |step|
 end
 raise "Missing validated release artifact" unless upload
 assert_equal(
-  publish.fetch("if"), upload.fetch("if"), "upload only successful tag builds"
+  "#{publish.fetch('if')} && matrix.ruby == '3.3'", upload.fetch("if"),
+  "only the Ruby 3.3 tag build uploads the release artifact"
 )
 assert_equal(
   "error", upload.fetch("with").fetch("if-no-files-found"), "missing artifact must fail"
@@ -100,4 +122,4 @@ pushes.each do |step|
   end
 end
 
-puts "Release workflow guards passed (gating, validation, artifact handoff, integrity)."
+puts "Release workflow guards passed (Ruby matrix, gating, validation, artifact handoff, integrity)."
