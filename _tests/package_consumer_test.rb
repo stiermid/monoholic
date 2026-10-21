@@ -20,6 +20,10 @@ def build_consumer(gem_home, version, output_root)
     installed_root.start_with?("#{File.realpath(gem_home)}/"),
     "Consumer must use the installed package, not the repository theme"
   )
+  assert_package(
+    Bundler.which("jekyll").nil?,
+    "Consumer must not have a Jekyll wrapper on PATH"
+  )
 
   ["", "/blog"].each_with_index do |baseurl, index|
     destination = File.join(output_root, "output-#{index}")
@@ -44,7 +48,8 @@ def build_consumer(gem_home, version, output_root)
     File.write(config_path, YAML.dump(config))
     output, status = Open3.capture2e(
       RbConfig.ruby, Gem.bin_path("bundler", "bundle", Bundler::VERSION),
-      "exec", "jekyll", "build", "--config", config_path
+      "exec", RbConfig.ruby, Gem.bin_path("jekyll", "jekyll"),
+      "build", "--config", config_path
     )
     assert_package(
       status.success?, "Packaged consumer CLI build failed:\n#{output}"
@@ -186,6 +191,8 @@ Dir.mktmpdir("monoholic-consumer-") do |root|
     "BUNDLE_FROZEN" => "false",
     "BUNDLE_DEPLOYMENT" => "false",
     "BUNDLE_DISABLE_SHARED_GEMS" => "false",
+    # Reproduce vendored CI installs without global gem executables.
+    "PATH" => "",
     "RUBYOPT" => nil
   }
   Bundler.with_unbundled_env do

@@ -325,6 +325,10 @@ compiled CSS, scripts, favicons, feeds, and URLs. Negative tests reject broken
 packages and invalid versions, including packages missing the ERB runtime
 dependency on Ruby 3.4 and newer.
 
+Consumer builds use resolved Ruby and gem executable paths, with no Jekyll
+wrapper available on `PATH`. This also covers vendored CI installations
+without relying on globally installed gem executables.
+
 After validation, the Ruby 3.3 tag job uploads its gem and SHA-256 manifest
 as a seven-day artifact; the Ruby 3.4 job does not upload a competing release
 artifact. After both jobs succeed, the publishing job downloads those same
