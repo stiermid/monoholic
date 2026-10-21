@@ -1,0 +1,12 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# Keep the native Pages graph separate from the theme's Jekyll 4.4 gemspec.
+gem "github-pages", "= 232", group: :jekyll_plugins
+# Pin the transitive parser to the published Pages version as well.
+gem "nokogiri", "= 1.16.7"
+
+# Test tooling and support for Ruby distributions that package ERB separately.
+gem "erb", ">= 2.2", "< 7.0"
+gem "webmock", "~> 3.25", require: false

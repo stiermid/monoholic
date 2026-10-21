@@ -307,6 +307,29 @@ Localization checks cover language inheritance across all four layouts, page ove
 
 To run one browser, use `npm run test:browser -- --project=chromium`. You can also set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to use a locally installed Chromium binary. Generated sites, screenshots, and traces are ignored by Git; CI retains failure diagnostics for seven days.
 
+### Native GitHub Pages Checks
+
+The Pages tests use a separate Gemfile and lockfile so the theme's Jekyll 4.4
+dependency cannot affect the native Pages graph. Install and run them with:
+
+```sh
+BUNDLE_GEMFILE=_tests/pages/Gemfile bundle install
+BUNDLE_GEMFILE=_tests/pages/Gemfile bundle exec \
+  ruby _tests/pages/consumer_test.rb
+```
+
+This bundle pins GitHub Pages 232, Jekyll 3.10.0, Sass converter 1.5.2, and
+the other published Pages dependencies. The test invokes the real Pages
+build command with its safe-mode configuration and default plugins. It
+checks root and `/blog` sites, layouts, menu data, nested Liquid includes,
+recursive headings, language settings, compiled CSS, scripts, favicons,
+feeds, sitemap URLs, and rejection of a broken theme archive.
+
+Only the theme-download HTTP response is supplied locally, using a ZIP of
+the checkout. The real `jekyll-remote-theme` plugin downloads, extracts, and
+loads it. No live GitHub requests or installed `monoholic` gem are used.
+The generated lockfile retains Bundler's checksum format.
+
 ### Release Validation
 
 Both pull requests and release-tag pushes run the build and test checks on
