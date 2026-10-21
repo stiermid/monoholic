@@ -40,10 +40,14 @@ $ bundle install
 
 ### Manual Installation (GitHub Pages)
 
-If you're running Jekyll without RubyGems or prefer to use GitHub Pages remote themes, update your `_config.yml`:
+For GitHub's built-in Jekyll build, add the following to `_config.yml`:
 
 ```yaml
-remote_theme: stiermid/monoholic
+title: "Your site"
+description: "A short description of your site."
+remote_theme: stiermid/monoholic@v1.3.0
+url: "https://<user>.github.io"
+baseurl: "/your-repo"
 plugins:
   - jekyll-remote-theme
   - jekyll-feed
@@ -51,16 +55,54 @@ plugins:
   - jekyll-sitemap
 ```
 
-`jekyll-remote-theme` fetches the theme on Pages; `jekyll-feed` and `jekyll-seo-tag` are required by the theme's `head.html` (`{% feed_meta %}`, `{% seo %}`), and `jekyll-sitemap` generates `sitemap.xml` referenced by the theme's `robots.txt`. For project sites, also set `baseurl` (e.g. `/your-repo`) and `url` (e.g. `https://<user>.github.io`). To pin a release: `remote_theme: stiermid/monoholic@v1.3.0`.
+Replace the user and repository placeholders. Use `baseurl: ""` for a user
+site or a custom domain served at its root. Pinning a release keeps theme
+updates explicit; omit `@v1.3.0` only if you want the repository's default
+branch instead.
 
-> **Pages note:** Native GitHub Pages builds run Jekyll 3.9. The `monoholic` RubyGem requires Jekyll 4.4, so on GitHub Pages use `remote_theme` only (not `theme:` + `gem "monoholic"`). SCSS intentionally uses `@import` for 3.9 compatibility.
+`jekyll-remote-theme` loads the theme. Feed and SEO tags require
+`jekyll-feed` and `jekyll-seo-tag`; `jekyll-sitemap` generates the sitemap
+and a default `robots.txt` when the site does not supply one.
 
-| Install method                                           | Jekyll        | How                         |
-| -------------------------------------------------------- | ------------- | --------------------------- |
-| RubyGems (`theme: monoholic`)                            | 4.4           | local / CI / non-Pages host |
-| GitHub Pages (`remote_theme: stiermid/monoholic@v1.3.0`) | 3.9 via Pages | Pages only                  |
+Create a homepage, such as `index.md`:
 
-Or, simply fork this repository, adapt the `_config.yml` according to your needs, and you're good to go!
+```markdown
+---
+layout: home
+---
+
+Welcome to my site.
+```
+
+Also create `_data/menu.yml` in your site:
+
+```yaml
+entries:
+  - title: all posts
+    post_list: true
+```
+
+Native Jekyll 3.10 does not inherit a remote theme's `_data` directory, so
+your site must supply its own menu. Add your posts under `_posts/` and
+extend the menu using the options below.
+
+> **Pages note:** Native Pages currently uses Jekyll 3.10.0 and Sass converter
+> 1.5.2 with Ruby Sass. The `monoholic` gem requires Jekyll 4.4, so do not
+> combine it with the native Pages bundle. Use `remote_theme` instead of
+> `theme: monoholic` for that build. SCSS retains `@import` for this older
+> Sass compiler.
+
+| Method       | Jekyll | Build               |
+| ------------ | ------ | ------------------- |
+| RubyGem      | 4.4    | Local / custom CI   |
+| Remote theme | 3.10   | Native GitHub Pages |
+
+You can still deploy a Jekyll 4.4 gem-based site to Pages as static output
+from a custom build workflow. The version restriction applies to GitHub's
+built-in Jekyll build, not to static hosting.
+
+For a full source checkout instead, fork this repository and adapt
+`_config.yml` to your site.
 
 ## Usage
 
@@ -310,7 +352,8 @@ To run one browser, use `npm run test:browser -- --project=chromium`. You can al
 ### Native GitHub Pages Checks
 
 The Pages tests use a separate Gemfile and lockfile so the theme's Jekyll 4.4
-dependency cannot affect the native Pages graph. Install and run them with:
+dependency cannot affect the native Pages graph. CI runs them on Ruby 3.3.
+Install and run them with:
 
 ```sh
 BUNDLE_GEMFILE=_tests/pages/Gemfile bundle install
@@ -330,17 +373,21 @@ the checkout. The real `jekyll-remote-theme` plugin downloads, extracts, and
 loads it. No live GitHub requests or installed `monoholic` gem are used.
 The generated lockfile retains Bundler's checksum format.
 
+Review the [published dependency matrix](https://pages.github.com/versions/)
+when updating this bundle. Update its Gemfile, lockfile, and expected versions
+in `_tests/pages/consumer_test.rb` together.
+
 ### Release Validation
 
-Both pull requests and release-tag pushes run the build and test checks on
-Ruby 3.3 and 3.4. Publishing depends on both Ruby jobs succeeding and is
-restricted to pushed `v*` tags; pull requests never publish. The tag must be
-`v` followed by the exact gem version in `monoholic.gemspec`, including any
-RubyGems prerelease suffix. Update the version metadata and lockfiles
-together before tagging.
+Pull requests and release-tag pushes run gem checks on Ruby 3.3 and 3.4,
+plus the separate native Pages check on Ruby 3.3. Publishing requires all
+three jobs to succeed and is restricted to pushed `v*` tags; pull requests
+never publish. The tag must be `v` followed by the exact gem version in
+`monoholic.gemspec`, including any RubyGems prerelease suffix. Update the
+version metadata and lockfiles together before tagging.
 
-Each Ruby job builds the gem once and installs it into a temporary gem home.
-A clean consumer site's Gemfile declares only `monoholic`; Bundler resolves
+Each gem-validation job builds the gem once and installs it into a temporary
+gem home. A clean consumer's Gemfile declares only `monoholic`; Bundler resolves
 its runtime dependencies from installed gems without downloading gems or
 falling back to repository theme files. The checks run
 `bundle exec jekyll build` for root and `/blog` sites and verify layouts,
@@ -352,13 +399,13 @@ Consumer builds use resolved Ruby and gem executable paths, with no Jekyll
 wrapper available on `PATH`. This also covers vendored CI installations
 without relying on globally installed gem executables.
 
-After validation, the Ruby 3.3 tag job uploads its gem and SHA-256 manifest
-as a seven-day artifact; the Ruby 3.4 job does not upload a competing release
-artifact. After both jobs succeed, the publishing job downloads those same
-bytes, verifies the checksum and package name/version, and pushes the same
-gem to GitHub Packages and RubyGems—without checking out or rebuilding the
-source. Rerunning validation replaces the artifact only after checks succeed;
-if it has expired, rerun validation rather than just the publishing job.
+After validation, the Ruby 3.3 gem job uploads its gem and SHA-256 manifest
+as a seven-day artifact; the other jobs do not upload a competing release
+artifact. Once both gem jobs and native Pages pass, publishing downloads
+those same bytes, verifies the checksum and package name/version, and pushes
+the same gem to GitHub Packages and RubyGems—without checking out or rebuilding
+the source. Rerunning validation replaces the artifact only after checks
+succeed; if it has expired, rerun validation rather than just publishing.
 
 Publishing keeps the existing authentication: `GITHUB_TOKEN` with package-write permission for GitHub Packages, and the repository's `RUBYGEMS_API_KEY` secret for RubyGems. Validation has read-only repository permissions; registry credentials are used only by publishing steps.
 
