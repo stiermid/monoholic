@@ -45,7 +45,7 @@ For GitHub's built-in Jekyll build, add the following to `_config.yml`:
 ```yaml
 title: "Your site"
 description: "A short description of your site."
-remote_theme: stiermid/monoholic@v1.3.0
+remote_theme: stiermid/monoholic@v1.4.0
 url: "https://<user>.github.io"
 baseurl: "/your-repo"
 plugins:
@@ -57,7 +57,7 @@ plugins:
 
 Replace the user and repository placeholders. Use `baseurl: ""` for a user
 site or a custom domain served at its root. Pinning a release keeps theme
-updates explicit; omit `@v1.3.0` only if you want the repository's default
+updates explicit; omit `@v1.4.0` only if you want the repository's default
 branch instead.
 
 `jekyll-remote-theme` loads the theme. Feed and SEO tags require
