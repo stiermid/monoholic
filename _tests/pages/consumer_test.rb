@@ -82,6 +82,10 @@ Dir.mktmpdir("monoholic-pages-") do |root|
   source = File.join(root, "site")
   FileUtils.mkdir_p(source)
   FileUtils.cp_r(File.join(fixtures, "."), source)
+  FileUtils.cp(
+    File.join(repository, "_posts", "2026-04-01-overview.md"),
+    File.join(source, "_posts")
+  )
   %w[_layouts _sass assets].each do |path|
     assert_pages(
       !File.exist?(File.join(source, path)),
@@ -187,6 +191,27 @@ Dir.mktmpdir("monoholic-pages-") do |root|
     assert_pages(
       document(destination, "tables.html").css("main table").length == 4,
       "Markdown and HTML tables must both render"
+    )
+
+    showcase = document(destination, "2026/04/01/overview.html")
+    boxes = showcase.css('.task-list input[type="checkbox"]')
+    names = boxes.map do |box|
+      label = box.ancestors("label").first
+      assert_pages(label, "Task checkboxes must have native labels")
+      assert_pages(label.css("input").length == 1, "One checkbox per label")
+      assert_pages(box.key?("disabled"), "Showcase tasks must be read-only")
+      label.text.split.join(" ")
+    end
+    assert_pages(
+      names == [
+        "Initial theme setup", "Fixed Prettier TOC formatting issue",
+        "Implement Dark Mode toggle", "Optimize image loading"
+      ],
+      "Task labels must retain their visible names"
+    )
+    assert_pages(
+      boxes.map { |box| box.key?("checked") } == [true, true, false, false],
+      "Task completion states must be preserved"
     )
 
     nested = document(destination, "nested-menu.html")

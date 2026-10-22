@@ -23,6 +23,31 @@
   }
 }
 
+.task-list-item {
+  margin-bottom: var(--space-sm);
+
+  > label {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+
+    > span {
+      min-inline-size: 0;
+    }
+
+    > .task-list-item-checkbox {
+      flex: 0 0 auto;
+      margin: 0;
+    }
+  }
+}
+
+.task-list-item-checkbox {
+  font: inherit;
+  inline-size: 1em;
+  block-size: 1em;
+}
+
 .post-header {
   display: flex;
   justify-content: space-between;

@@ -25,10 +25,25 @@ module.exports = defineConfig({
     { name: "firefox", use: { browserName: "firefox" } },
     { name: "webkit", use: { browserName: "webkit" } },
   ],
-  webServer: {
-    command:
-      "bundle exec jekyll serve --source _tests/fixtures --config _tests/fixtures/_config.yml --destination _tests/.site --disable-disk-cache --host 127.0.0.1 --port 4173",
-    url: "http://127.0.0.1:4173",
-    reuseExistingServer: false,
-  },
+  webServer: [
+    {
+      command: [
+        "bundle exec jekyll serve",
+        "--source _tests/fixtures --config _tests/fixtures/_config.yml",
+        "--destination _tests/.site --disable-disk-cache --no-watch",
+        "--host 127.0.0.1 --port 4173",
+      ].join(" "),
+      url: "http://127.0.0.1:4173",
+      reuseExistingServer: false,
+    },
+    {
+      command: [
+        "bundle exec jekyll serve --config _config.yml --baseurl ''",
+        "--destination _tests/.demo-site --disable-disk-cache --no-watch",
+        "--host 127.0.0.1 --port 4174",
+      ].join(" "),
+      url: "http://127.0.0.1:4174",
+      reuseExistingServer: false,
+    },
+  ],
 });

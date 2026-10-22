@@ -308,6 +308,30 @@ theme_config:
 
 Without JavaScript, tables use fixed-layout, wrapping cells, and code blocks still scroll. For especially wide tables that should scroll even without JavaScript, supply a `.table-scroll` wrapper with `tabindex="0"`, `role="region"`, and an accessible name (`aria-label` or `aria-labelledby`). The enhancement reuses that wrapper rather than nesting another one.
 
+### Task Lists
+
+For read-only task lists, associate every checkbox with its visible text
+using a native `<label>`. Kramdown's plain GFM `- [ ]` output does not make
+that association, and the theme does not repair it with JavaScript.
+
+Use labelled HTML, as in the components showcase:
+
+```html
+<ul class="task-list">
+  <li class="task-list-item">
+    <label>
+      <input type="checkbox" class="task-list-item-checkbox" disabled />
+      <span>A task that has not been completed</span>
+    </label>
+  </li>
+</ul>
+```
+
+Add `checked` for completed tasks. Keep `disabled` for a non-interactive
+checklist; checkboxes do not support `readonly`. The controls retain their
+native appearance, scale with the surrounding text, and need no JavaScript
+for their accessible names or completion states.
+
 ### Per-Page JavaScript
 
 To load custom JavaScript files on a specific page, add a `custom_js` list to the page's front matter:
@@ -349,6 +373,12 @@ Text-sizing checks enlarge the root font to 200% at each viewport width,
 with and without JavaScript. A Firefox-specific test also changes the
 actual browser default-font preference to 32 pixels. These are focused
 regression checks, not a complete WCAG conformance audit.
+
+The task-list checks use the actual showcase post, not a duplicated
+fixture. They verify names, disabled and checked states, and text/control
+scaling at both font sizes and all four widths, with scripts on and off.
+The fixture and demo servers disable watching so generated test artifacts
+cannot trigger rebuilds during a run.
 
 Menu rendering checks cover branching recursion, deep nesting, untitled groups, repeated titles, unique IDs, escaped labels, and independent menu instances in normal and Jekyll safe mode. Browser tests also verify native heading and section semantics with JavaScript disabled.
 

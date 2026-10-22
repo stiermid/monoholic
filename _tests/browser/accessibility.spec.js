@@ -81,5 +81,34 @@ for (const javaScriptEnabled of [true, false]) {
         }
       });
     }
+
+    test("showcase task checkboxes are named and read-only", async ({
+      page,
+    }) => {
+      const tasks = [
+        ["Initial theme setup", true],
+        ["Fixed Prettier TOC formatting issue", true],
+        ["Implement Dark Mode toggle", false],
+        ["Optimize image loading", false],
+      ];
+      for (const enlarged of [false, true]) {
+        if (enlarged) await enlargeText(page);
+        const fontSize = enlarged ? "32px" : "16px";
+        for (const width of widths) {
+          await page.setViewportSize({ width, height: 900 });
+          await page.goto("http://127.0.0.1:4174/2026/04/01/overview.html");
+          await expect(page.getByRole("checkbox")).toHaveCount(tasks.length);
+          for (const [name, checked] of tasks) {
+            const checkbox = page.getByRole("checkbox", { name, exact: true });
+            await expect(checkbox).toBeDisabled();
+            await expect(checkbox).toBeChecked({ checked });
+            await expect(checkbox).toHaveCSS("font-size", fontSize);
+            await expect(checkbox).toHaveCSS("width", fontSize);
+          }
+          await expectNoPageOverflow(page);
+          await expectNoClippedText(page);
+        }
+      }
+    });
   });
 }
