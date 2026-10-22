@@ -289,6 +289,10 @@ To override CSS custom properties (colors, spacing, fonts) without touching SCSS
 
 ### Responsive Content
 
+Body text defaults to `1rem`, following the browser's default font size
+instead of fixing it at 16 pixels. When overriding `--font-size-base`, use
+a relative value such as `1rem` or `1.125rem` to preserve that preference.
+
 Long words, URLs, and inline code wrap when necessary. Plain and highlighted code blocks preserve indentation and source lines, scrolling horizontally inside the block instead of expanding the page.
 
 The small, dependency-free `assets/js/content-scroll.js` script progressively enhances tables with scroll containers while preserving native table semantics. Overflowing tables and code blocks receive a keyboard tab stop, an accessible name, and a visible scrolling hint. These are updated when the viewport, content dimensions, or fonts change; fitting content does not add automatic tab stops.
@@ -340,6 +344,11 @@ npm run test:browser
 ```
 
 Browser tests build and serve an isolated fixture site. They cover Chromium, Firefox, and WebKit at 320px, 375px, 768px, and 1280px, including long text, plain and highlighted code, Markdown and HTML tables, keyboard scrolling, resizing, and JavaScript-disabled layouts. External fonts are blocked so the tests do not depend on Google Fonts being available.
+
+Text-sizing checks enlarge the root font to 200% at each viewport width,
+with and without JavaScript. A Firefox-specific test also changes the
+actual browser default-font preference to 32 pixels. These are focused
+regression checks, not a complete WCAG conformance audit.
 
 Menu rendering checks cover branching recursion, deep nesting, untitled groups, repeated titles, unique IDs, escaped labels, and independent menu instances in normal and Jekyll safe mode. Browser tests also verify native heading and section semantics with JavaScript disabled.
 

@@ -210,6 +210,10 @@ Dir.mktmpdir("monoholic-pages-") do |root|
     end
     css = File.read(File.join(destination, "assets", "css", "style.css"))
     assert_pages(
+      css.match?(/--font-size-base:\s*1rem;/),
+      "The default body font size must respect the browser root size"
+    )
+    assert_pages(
       css.include?(":root") && css.include?(".table-scroll") &&
         !css.match?(/@(?:use|import)\b/),
       "Ruby Sass did not compile the remote theme stylesheet"
