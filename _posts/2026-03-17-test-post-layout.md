@@ -48,7 +48,7 @@ Here's a blockquote:
 
 ## Links and Images
 
-This is a [link to the homepage](/).
+This is a [link to the homepage]({{ '/' | relative_url }}).
 
 If there are images, they would go here:
 ![Placeholder Image](https://cdn.freebiesupply.com/logos/large/2x/linux-tux-1-logo-png-transparent.png)
