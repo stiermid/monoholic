@@ -18,8 +18,12 @@ markdown: kramdown
 kramdown:
   input: GFM
 
-# Keep the browser test configuration out of the demo site's public output.
+# Keep development files out of the demo site's public output.
 exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - monoholic.gemspec
   - playwright.config.js
 
 theme_config:
